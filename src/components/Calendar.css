@@ -1,5 +1,5 @@
 .react-calendar {
-  width: 450px;
+  width: 480px;
   max-width: 100%;
   background: white;
   border-radius: 15px;
@@ -29,7 +29,7 @@
 }
 
 /* Custom Navigation Styles */
-@media screen and (max-width: 500px) {
+/* @media screen and (max-width: 500px) {
   .react-calendar__navigation__prev2-button,
   .react-calendar__navigation__prev-button {
     display: none;
@@ -38,7 +38,7 @@
     padding-left: 1rem;
     text-align: left;
   }
-}
+} */
 
 .react-calendar button {
   margin: 0;

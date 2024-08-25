@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
 import Calendar from "react-calendar"
-import { add, format } from "date-fns"
+import { add, format, isSameMinute } from "date-fns"
 
 interface DateType {
   justDate: Date | null
@@ -14,6 +14,13 @@ const CalendarComponent = () => {
     dateTime: null,
   })
 
+  const busyTimes = [
+    new Date("2024-08-26T09:30:00"),
+    new Date("2024-08-26T10:00:00"),
+    new Date("2024-08-26T12:30:00"),
+    new Date("2024-08-26T15:00:00"),
+  ]
+
   const getTimes = () => {
     if (!selectedDate.justDate) return
 
@@ -25,7 +32,11 @@ const CalendarComponent = () => {
 
     const times = []
     for (let i = beginning; i <= end; i = add(i, { minutes: interval })) {
-      times.push(i)
+      const isBusy = busyTimes.some((busyTime) => isSameMinute(i, busyTime))
+
+      if (!isBusy) {
+        times.push(i)
+      }
     }
 
     return times
@@ -45,9 +56,9 @@ const CalendarComponent = () => {
 
   console.log(selectedDate)
   return (
-    <div className="p-6">
+    <div className="flex flex-col items-center p-4 ">
       {selectedDate.justDate ? (
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className=" flex flex-col items-center w-full">
           <Calendar
             minDate={new Date()}
             view="month"
@@ -57,16 +68,18 @@ const CalendarComponent = () => {
               setSelectedDate((prev) => ({ ...prev, justDate: date }))
             }
           />
-          <div>
-            <p className="mb-4">Date Selected</p>
-            <div
-              className="flex md:flex-col gap-4 p-2 overflow-y-auto"
-              style={{ maxHeight: "380px" }}
-            >
+          <div
+            className="flex flex-col gap-2 max-w-full overflow-auto mt-8"
+            style={{ width: "720px" }}
+          >
+            <p className="mt-4">
+              {format(selectedDate.justDate, "EEEE, MMMM d")}
+            </p>
+            <div className="flex gap-4 p-2 py-4 max-w-full overflow-auto text-xs md:text-base md:grid md:grid-cols-5 ">
               {times?.map((time, i) => (
                 <div
                   key={`time-${i}`}
-                  className="rounded-lg border-indigo-400 text-indigo-600 border-2 py-2 px-8 hover:bg-indigo-400 hover:text-white cursor-pointer"
+                  className="rounded-lg border-indigo-400 text-indigo-600 border-2 py-2 px-4 md:px-6 hover:bg-indigo-400 hover:text-white cursor-pointer"
                 >
                   <button
                     type="button"
@@ -83,14 +96,16 @@ const CalendarComponent = () => {
           </div>
         </div>
       ) : (
-        <Calendar
-          minDate={new Date()}
-          view="month"
-          calendarType="gregory"
-          onClickDay={(date) =>
-            setSelectedDate((prev) => ({ ...prev, justDate: date }))
-          }
-        />
+        <div className="flex flex-col items-center w-full">
+          <Calendar
+            minDate={new Date()}
+            view="month"
+            calendarType="gregory"
+            onClickDay={(date) =>
+              setSelectedDate((prev) => ({ ...prev, justDate: date }))
+            }
+          />
+        </div>
       )}
     </div>
   )
