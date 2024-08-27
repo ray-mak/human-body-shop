@@ -2,6 +2,8 @@ import { currentUser } from "@clerk/nextjs/server"
 import { db } from "./db"
 import { checkRole } from "../utils/roles"
 
+//Check if user is an admin, if so, check if admin is in the db, if not, create a new admin. Do the same for users.
+
 export const checkUser = async () => {
   if (checkRole("admin")) {
     const admin = await currentUser()
