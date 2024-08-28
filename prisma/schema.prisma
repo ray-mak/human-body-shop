@@ -43,4 +43,15 @@ model Staff {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   appointments Appointment[] @relation("StaffAppointment")
+  availabilities Availability[] @relation("RegularAvailability")
+}
+
+model Availability {
+  id        String   @id @default(cuid())
+  name  String    //monday, tues...
+  dayOfWeek Int   //@ see getDay() , 0 for Sunday 1 for Monaday...
+  startTime DateTime
+  endTime   DateTime
+  staffId String
+  staff Staff @relation("RegularAvailability",fields: [staffId], references: [clerkStaffId], onDelete: Cascade)
 }

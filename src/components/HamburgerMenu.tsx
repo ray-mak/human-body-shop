@@ -56,7 +56,7 @@ export default function HamburgerMenu() {
           Contact
         </Link>
         <SignedOut>
-          <SignInButton />
+          <SignInButton forceRedirectUrl="/admin" />
         </SignedOut>
         <SignedIn>
           <UserButton />
