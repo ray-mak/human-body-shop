@@ -248,27 +248,29 @@ export default function ManageAvailibilityPage() {
   return (
     <div className="flex">
       <div className="mt-20 w-full flex items-center justify-center">
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4 p-4 border mb-20">
           <h1>Manage Availibility</h1>
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-2 sm:gap-8">
             {availibility.map((day, dayIndex) => {
               return (
                 <div
                   key={dayIndex}
-                  className="grid grid-cols-5 gap-4 items-center"
+                  className="flex flex-col sm:grid sm:grid-cols-5 gap-4 items-center"
                 >
                   <div
                     className={`${
                       day.availibility.length === 0
-                        ? "self-center"
+                        ? "self-start sm:self-center"
                         : "self-start"
                     } flex items-center h-12`}
                   >
                     <p>{day.day}</p>
                   </div>
-                  <div className="col-span-3 flex flex-col gap-2">
+                  <div className="w-full col-span-3 flex flex-col gap-2">
                     {day.availibility.length === 0 ? (
-                      <p className="text-gray-600">Unavailable</p>
+                      <p className="w-full text-gray-600 text-base">
+                        Unavailable
+                      </p>
                     ) : (
                       <div className="flex flex-col gap-2">
                         {day.availibility.map((time, timeIndex) => {
@@ -279,11 +281,11 @@ export default function ManageAvailibilityPage() {
                           )
                           return (
                             <div key={timeIndex}>
-                              <div className="flex gap-4 items-center">
+                              <div className="flex gap-1 sm:gap-4 items-center">
                                 <input
                                   type="time"
                                   name="start"
-                                  className="w-32 p-2 border border-gray-400 rounded-lg "
+                                  className="w-30 sm:w-32 p-2 border border-gray-400 rounded-lg text-sm sm:text-base"
                                   onChange={(event) =>
                                     handleTimeChange(dayIndex, timeIndex, event)
                                   }
@@ -297,7 +299,7 @@ export default function ManageAvailibilityPage() {
                                 <input
                                   type="time"
                                   name="end"
-                                  className="w-32 p-2 border border-gray-400 rounded-lg"
+                                  className="w-30 sm:w-32 p-2 border border-gray-400 rounded-lg text-sm sm:text-base"
                                   onChange={(event) =>
                                     handleTimeChange(dayIndex, timeIndex, event)
                                   }
@@ -325,20 +327,6 @@ export default function ManageAvailibilityPage() {
                                   </p>
                                 </div>
                               )}
-                              {/* {errorMessage[dayIndex].error.overlaps && (
-                              <div>
-                                <p className="mt-1 text-red-600">
-                                  Please choose times that do not overlap.
-                                </p>
-                              </div>
-                            )}
-                            {errorMessage[dayIndex].error.emptyInputs && (
-                              <div>
-                                <p className="mt-1 text-red-600">
-                                  Time inputs cannot be empty.
-                                </p>
-                              </div>
-                            )} */}
                             </div>
                           )
                         })}
@@ -364,7 +352,7 @@ export default function ManageAvailibilityPage() {
                     className={`h-12 py-2 px-4 rounded-md hover:bg-gray-100 ${
                       day.availibility.length === 0
                         ? "self-center"
-                        : "self-start"
+                        : "self-center sm:self-start"
                     }`}
                     onClick={() => addAvailibility(dayIndex)}
                   >
@@ -374,13 +362,15 @@ export default function ManageAvailibilityPage() {
               )
             })}
           </div>
-          <button
-            type="submit"
-            className="py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
-            onClick={handleSubmit}
-          >
-            Save Availibilities
-          </button>
+          <div className="w-screen sm:w-full fixed sm:relative bottom-0 left-0 p-2 bg-white py-4 sm:py-0 border-t">
+            <button
+              type="submit"
+              className="w-full py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
+              onClick={handleSubmit}
+            >
+              Save Availibilities
+            </button>
+          </div>
         </form>
       </div>
     </div>
