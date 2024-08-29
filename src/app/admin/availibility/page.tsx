@@ -1,8 +1,13 @@
 "use client"
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { error } from "console"
-import { MouseEventHandler, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
+import {
+  findOverlaps,
+  isStartBeforeEnd,
+} from "@/lib/validation/availabilityValidation"
+import { addAvailibilityServer } from "@/app/actions/addAvailibilities"
+import { ClipLoader } from "react-spinners"
 
 type Availibility = { start: string; end: string }
 type AvailibilityDay = { day: string; availibility: Availibility[] }
@@ -40,6 +45,9 @@ export default function ManageAvailibilityPage() {
     { day: "Friday", availibility: [{ start: "09:00", end: "17:00" }] },
     { day: "Saturday", availibility: [] },
   ])
+
+  const [success, setSuccess] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const [isValid, setIsValid] = useState<IsValid[]>([
     {
@@ -228,8 +236,21 @@ export default function ManageAvailibilityPage() {
       )
     }
     console.log(isValid)
-    console.log(allValid())
-    if (!allValid()) return
+    if (allValid()) {
+      const clientAddAvailibility = async (availibility: AvailibilityDay[]) => {
+        setLoading(true)
+        const { message, error } = await addAvailibilityServer(availibility)
+        if (error) {
+          console.error("Error updating availabilities")
+          setLoading(false)
+        } else {
+          console.log(message)
+          setSuccess(true)
+          setLoading(false)
+        }
+      }
+      clientAddAvailibility(availibility)
+    }
   }
 
   function resetErrorMessages() {
@@ -244,12 +265,31 @@ export default function ManageAvailibilityPage() {
       }
     })
     setErrorMessage(errorMessages)
+    setSuccess(false)
   }
   return (
     <div className="flex">
+      {loading && (
+        <div>
+          <div className="loading-screen absolute w-full bg-white h-full z-10 opacity-80"></div>
+          <div className="loading-screen absolute w-full h-full  flex items-center justify-center">
+            <div className="p-12 bg-white flex flex-col gap-8 items-center justify-center bg-white z-20 border-2 border-blue-500 rounded-lg shadow-xl">
+              <ClipLoader size={100} color={"rgb(59 130 246)"} />
+              <p className="italic text-neutral-600">Updating...</p>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="mt-20 w-full flex items-center justify-center">
         <form className="flex flex-col gap-4 p-4 border mb-20">
-          <h1>Manage Availibility</h1>
+          <h1 className="text-xl font-semibold text-center">
+            Manage Availability
+          </h1>
+          {success && (
+            <div className="w-full bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-md">
+              <p className="text-center">Availabilities updated successfully</p>
+            </div>
+          )}
           <div className="flex flex-col gap-2 sm:gap-8">
             {availibility.map((day, dayIndex) => {
               return (
@@ -375,33 +415,4 @@ export default function ManageAvailibilityPage() {
       </div>
     </div>
   )
-}
-
-function isStartBeforeEnd(start: string, end: string): boolean {
-  if (start === "" || end === "") {
-    return true
-  }
-  return start < end
-}
-
-function doTimesNotOverlap(a: Availibility, b: Availibility): boolean {
-  return (
-    (a.start < b.start && a.end < b.start) ||
-    (b.start < a.start && b.end < a.start)
-  )
-}
-
-function findOverlaps(days: Day[]): { dayIndex: number }[] {
-  const overlaps: { dayIndex: number }[] = []
-  days.forEach((day, dayIndex) => {
-    const availibility = day.availibility
-    for (let i = 0; i < availibility.length; i++) {
-      for (let j = i + 1; j < availibility.length; j++) {
-        if (!doTimesNotOverlap(availibility[i], availibility[j])) {
-          overlaps.push({ dayIndex })
-        }
-      }
-    }
-  })
-  return overlaps
 }

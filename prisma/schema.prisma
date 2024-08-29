@@ -50,8 +50,8 @@ model Availability {
   id        String   @id @default(cuid())
   name  String    //monday, tues...
   dayOfWeek Int   //@ see getDay() , 0 for Sunday 1 for Monaday...
-  startTime DateTime
-  endTime   DateTime
+  startTime String
+  endTime   String
   staffId String
   staff Staff @relation("RegularAvailability",fields: [staffId], references: [clerkStaffId], onDelete: Cascade)
 }
