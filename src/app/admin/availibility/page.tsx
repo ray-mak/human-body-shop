@@ -1,8 +1,24 @@
 "use client"
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useState } from "react"
-import { render } from "react-dom"
+import { error } from "console"
+import { MouseEventHandler, useEffect, useState } from "react"
+
+type Availibility = { start: string; end: string }
+type AvailibilityDay = { day: string; availibility: Availibility[] }
+type Day = { day: string; availibility: Availibility[] }
+type IsValid = {
+  day: string
+  isValid: {
+    noEmptyInputs: boolean
+    noOverlaps: boolean
+    startBeforeEnd: boolean
+  }
+}
+type ErrorMessage = {
+  day: string
+  error: { emptyInputs: boolean; overlaps: boolean; startBeforeEnd: boolean }
+}
 
 export default function ManageAvailibilityPage() {
   const days = [
@@ -14,7 +30,7 @@ export default function ManageAvailibilityPage() {
     "Friday",
     "Saturday",
   ]
-  //an array of objects for each day of the week. Each object has a day property and an availibility property which is an array of objects with a start and end property. Initially, monday through friday are set to have a start and end time of 9:00am and 5:00pm. Saturday and sunday are empty. Create a state for this array and a function to update the state.
+
   const [availibility, setAvailibility] = useState([
     { day: "Sunday", availibility: [] },
     { day: "Monday", availibility: [{ start: "09:00", end: "17:00" }] },
@@ -25,16 +41,155 @@ export default function ManageAvailibilityPage() {
     { day: "Saturday", availibility: [] },
   ])
 
+  const [isValid, setIsValid] = useState<IsValid[]>([
+    {
+      day: "Sunday",
+      isValid: { noEmptyInputs: true, noOverlaps: true, startBeforeEnd: true },
+    },
+    {
+      day: "Monday",
+      isValid: { noEmptyInputs: true, noOverlaps: true, startBeforeEnd: true },
+    },
+    {
+      day: "Tuesday",
+      isValid: { noEmptyInputs: true, noOverlaps: true, startBeforeEnd: true },
+    },
+    {
+      day: "Wednesday",
+      isValid: { noEmptyInputs: true, noOverlaps: true, startBeforeEnd: true },
+    },
+    {
+      day: "Thursday",
+      isValid: { noEmptyInputs: true, noOverlaps: true, startBeforeEnd: true },
+    },
+    {
+      day: "Friday",
+      isValid: { noEmptyInputs: true, noOverlaps: true, startBeforeEnd: true },
+    },
+    {
+      day: "Saturday",
+      isValid: { noEmptyInputs: true, noOverlaps: true, startBeforeEnd: true },
+    },
+  ])
+
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage[]>([
+    {
+      day: "Sunday",
+      error: { emptyInputs: false, overlaps: false, startBeforeEnd: true },
+    },
+    {
+      day: "Monday",
+      error: { emptyInputs: false, overlaps: false, startBeforeEnd: true },
+    },
+    {
+      day: "Tuesday",
+      error: { emptyInputs: false, overlaps: false, startBeforeEnd: true },
+    },
+    {
+      day: "Wednesday",
+      error: { emptyInputs: false, overlaps: false, startBeforeEnd: true },
+    },
+    {
+      day: "Thursday",
+      error: { emptyInputs: false, overlaps: false, startBeforeEnd: true },
+    },
+    {
+      day: "Friday",
+      error: { emptyInputs: false, overlaps: false, startBeforeEnd: true },
+    },
+    {
+      day: "Saturday",
+      error: { emptyInputs: false, overlaps: false, startBeforeEnd: true },
+    },
+  ])
+
+  useEffect(() => {
+    const overlaps = findOverlaps(availibility)
+    if (overlaps.length > 0) {
+      overlaps.forEach((overlap) => {
+        setIsValid((prev) => {
+          const newIsValid = [...prev]
+          newIsValid[overlap.dayIndex].isValid.noOverlaps = false
+          return newIsValid
+        })
+      })
+    } else if (overlaps.length === 0) {
+      setIsValid((prev) => {
+        const newIsValid = [...prev]
+        newIsValid.forEach((day) => {
+          day.isValid.noOverlaps = true
+        })
+        return newIsValid
+      })
+    }
+
+    const emptyInputs = availibility
+      .map((day, index) => {
+        const hasEmptyTimes = day.availibility.some(
+          (time) => time.start === "" || time.end === ""
+        )
+        return hasEmptyTimes ? index : -1
+      })
+      .filter((index) => index !== -1)
+
+    if (emptyInputs.length > 0) {
+      emptyInputs.forEach((index) => {
+        setIsValid((prev) => {
+          const newIsValid = [...prev]
+          newIsValid[index].isValid.noEmptyInputs = false
+          return newIsValid
+        })
+      })
+    } else if (emptyInputs.length === 0) {
+      setIsValid((prev) => {
+        const newIsValid = [...prev]
+        newIsValid.forEach((day) => {
+          day.isValid.noEmptyInputs = true
+        })
+        return newIsValid
+      })
+    }
+
+    const endBeforeStart = availibility
+      .map((day, index) => {
+        const hasInvalidTimes = day.availibility.some(
+          (time) => time.start >= time.end
+        )
+        return hasInvalidTimes ? index : -1
+      })
+      .filter((index) => index !== -1)
+
+    if (endBeforeStart.length > 0) {
+      endBeforeStart.forEach((index) => {
+        setIsValid((prev) => {
+          const newIsValid = [...prev]
+          newIsValid[index].isValid.startBeforeEnd = false
+          return newIsValid
+        })
+      })
+    } else if (endBeforeStart.length === 0) {
+      setIsValid((prev) => {
+        const newIsValid = [...prev]
+        newIsValid.forEach((day) => {
+          day.isValid.startBeforeEnd = true
+        })
+        return newIsValid
+      })
+    }
+  }, [availibility])
+
   const addAvailibility = (index: number) => {
     const newAvailibility = [...availibility]
     newAvailibility[index].availibility.push({ start: "", end: "" })
     setAvailibility(newAvailibility)
+    resetErrorMessages()
   }
 
   const deleteAvailibility = (dayIndex: number, timeIndex: number) => {
     const newAvailibility = [...availibility]
     newAvailibility[dayIndex].availibility.splice(timeIndex, 1)
     setAvailibility(newAvailibility)
+    resetErrorMessages()
   }
 
   const handleTimeChange = (
@@ -47,14 +202,53 @@ export default function ManageAvailibilityPage() {
     newAvailibility[dayIndex].availibility[timeIndex][fieldName] =
       event.target.value
     setAvailibility(newAvailibility)
+    resetErrorMessages()
   }
 
-  console.log(availibility)
+  function handleSubmit(e: React.FormEvent<HTMLButtonElement>) {
+    e.preventDefault()
+    function updateErrors() {
+      const updatedErrorMessages = isValid.map((object) => {
+        return {
+          day: object.day,
+          error: {
+            emptyInputs: object.isValid.noEmptyInputs ? false : true,
+            overlaps: object.isValid.noOverlaps ? false : true,
+            startBeforeEnd: object.isValid.startBeforeEnd ? false : true,
+          },
+        }
+      })
+      setErrorMessage(updatedErrorMessages)
+    }
+    updateErrors()
 
+    const allValid = (): boolean => {
+      return isValid.every((day) =>
+        Object.values(day.isValid).every((value) => value)
+      )
+    }
+    console.log(isValid)
+    console.log(allValid())
+    if (!allValid()) return
+  }
+
+  function resetErrorMessages() {
+    const errorMessages = errorMessage.map((object) => {
+      return {
+        day: object.day,
+        error: {
+          emptyInputs: false,
+          overlaps: false,
+          startBeforeEnd: true,
+        },
+      }
+    })
+    setErrorMessage(errorMessages)
+  }
   return (
     <div className="flex">
       <div className="mt-20 w-full flex items-center justify-center">
-        <div className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4">
           <h1>Manage Availibility</h1>
           <div className="flex flex-col gap-8">
             {availibility.map((day, dayIndex) => {
@@ -76,49 +270,93 @@ export default function ManageAvailibilityPage() {
                     {day.availibility.length === 0 ? (
                       <p className="text-gray-600">Unavailable</p>
                     ) : (
-                      day.availibility.map((time, timeIndex) => {
-                        return (
-                          <div
-                            key={timeIndex}
-                            className="flex gap-4 items-center"
-                          >
-                            <input
-                              type="time"
-                              name="start"
-                              className="w-32 p-2 border border-gray-400 rounded-lg "
-                              onChange={(event) =>
-                                handleTimeChange(dayIndex, timeIndex, event)
-                              }
-                              value={
-                                availibility[dayIndex].availibility[timeIndex]
-                                  .start
-                              }
-                            />
-                            <p> - </p>
-                            <input
-                              type="time"
-                              name="end"
-                              className="w-32 p-2 border border-gray-400 rounded-lg"
-                              onChange={(event) =>
-                                handleTimeChange(dayIndex, timeIndex, event)
-                              }
-                              value={
-                                availibility[dayIndex].availibility[timeIndex]
-                                  .end
-                              }
-                            />
-                            <button
-                              type="button"
-                              className="py-2 px-4 rounded-md hover:bg-gray-100"
-                              onClick={() =>
-                                deleteAvailibility(dayIndex, timeIndex)
-                              }
-                            >
-                              <FontAwesomeIcon icon={faXmark} />
-                            </button>
-                          </div>
-                        )
-                      })
+                      <div className="flex flex-col gap-2">
+                        {day.availibility.map((time, timeIndex) => {
+                          const startBeforeEnd = isStartBeforeEnd(
+                            availibility[dayIndex].availibility[timeIndex]
+                              .start,
+                            availibility[dayIndex].availibility[timeIndex].end
+                          )
+                          return (
+                            <div key={timeIndex}>
+                              <div className="flex gap-4 items-center">
+                                <input
+                                  type="time"
+                                  name="start"
+                                  className="w-32 p-2 border border-gray-400 rounded-lg "
+                                  onChange={(event) =>
+                                    handleTimeChange(dayIndex, timeIndex, event)
+                                  }
+                                  value={
+                                    availibility[dayIndex].availibility[
+                                      timeIndex
+                                    ].start
+                                  }
+                                />
+                                <p> - </p>
+                                <input
+                                  type="time"
+                                  name="end"
+                                  className="w-32 p-2 border border-gray-400 rounded-lg"
+                                  onChange={(event) =>
+                                    handleTimeChange(dayIndex, timeIndex, event)
+                                  }
+                                  value={
+                                    availibility[dayIndex].availibility[
+                                      timeIndex
+                                    ].end
+                                  }
+                                />
+                                <button
+                                  type="button"
+                                  className="py-2 px-4 rounded-md hover:bg-gray-100"
+                                  onClick={() =>
+                                    deleteAvailibility(dayIndex, timeIndex)
+                                  }
+                                >
+                                  <FontAwesomeIcon icon={faXmark} />
+                                </button>
+                              </div>
+                              {!startBeforeEnd && (
+                                <div>
+                                  <p className="mt-1 text-red-600">
+                                    Choose a start time earlier than the end
+                                    time.
+                                  </p>
+                                </div>
+                              )}
+                              {/* {errorMessage[dayIndex].error.overlaps && (
+                              <div>
+                                <p className="mt-1 text-red-600">
+                                  Please choose times that do not overlap.
+                                </p>
+                              </div>
+                            )}
+                            {errorMessage[dayIndex].error.emptyInputs && (
+                              <div>
+                                <p className="mt-1 text-red-600">
+                                  Time inputs cannot be empty.
+                                </p>
+                              </div>
+                            )} */}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+                    {errorMessage[dayIndex].error.overlaps && (
+                      <div>
+                        <p className="mt-1 text-red-600">
+                          Please choose times that do not overlap.
+                        </p>
+                      </div>
+                    )}
+                    {errorMessage[dayIndex].error.emptyInputs && (
+                      <div>
+                        <p className="mt-1 text-red-600">
+                          Time inputs cannot be empty.
+                        </p>
+                      </div>
                     )}
                   </div>
                   <button
@@ -136,8 +374,44 @@ export default function ManageAvailibilityPage() {
               )
             })}
           </div>
-        </div>
+          <button
+            type="submit"
+            className="py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
+            onClick={handleSubmit}
+          >
+            Save Availibilities
+          </button>
+        </form>
       </div>
     </div>
   )
+}
+
+function isStartBeforeEnd(start: string, end: string): boolean {
+  if (start === "" || end === "") {
+    return true
+  }
+  return start < end
+}
+
+function doTimesNotOverlap(a: Availibility, b: Availibility): boolean {
+  return (
+    (a.start < b.start && a.end < b.start) ||
+    (b.start < a.start && b.end < a.start)
+  )
+}
+
+function findOverlaps(days: Day[]): { dayIndex: number }[] {
+  const overlaps: { dayIndex: number }[] = []
+  days.forEach((day, dayIndex) => {
+    const availibility = day.availibility
+    for (let i = 0; i < availibility.length; i++) {
+      for (let j = i + 1; j < availibility.length; j++) {
+        if (!doTimesNotOverlap(availibility[i], availibility[j])) {
+          overlaps.push({ dayIndex })
+        }
+      }
+    }
+  })
+  return overlaps
 }
