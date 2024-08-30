@@ -1,21 +1,34 @@
 "use client"
 
-import { isStartBeforeEnd } from "@/lib/validation/availabilityValidation"
+import {
+  doTimesNotOverlap,
+  isStartBeforeEnd,
+} from "@/lib/validation/availabilityValidation"
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { format, set } from "date-fns"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Calendar from "react-calendar"
 
 type AvailableHours = {
-  startTime: string
-  endTime: string
+  start: string
+  end: string
 }
 
 export default function SpecialHoursForm() {
   const [selectedDate, setSelectedDate] = useState<Date | null>()
   const [timeModal, setTimeModal] = useState<boolean>(false)
   const [availableHours, setAvailableHours] = useState<AvailableHours[]>([])
+  const [isValid, setIsValid] = useState({
+    noEmptyInputs: true,
+    noOverlaps: true,
+    startBeforeEnd: true,
+  })
+  const [errorMessage, setErrorMessage] = useState({
+    noEmptyInputs: true,
+    noOverlaps: true,
+    startBeforeEnd: true,
+  })
 
   const tileClassName = ({ date }: { date: Date }) => {
     if (selectedDate && date.getDate() === selectedDate.getDate()) {
@@ -24,6 +37,58 @@ export default function SpecialHoursForm() {
     return ""
   }
 
+  useEffect(() => {
+    const overlaps = []
+    for (let i = 0; i < availableHours.length; i++) {
+      for (let j = i + 1; j < availableHours.length; j++) {
+        if (!doTimesNotOverlap(availableHours[i], availableHours[j])) {
+          overlaps.push(i)
+        }
+      }
+    }
+    if (overlaps.length > 0) {
+      setIsValid((prevState) => ({ ...prevState, noOverlaps: false }))
+    } else {
+      setIsValid((prevState) => ({ ...prevState, noOverlaps: true }))
+    }
+
+    if (availableHours.length > 0) {
+      const emptyInputs = availableHours.some(
+        (time) => time.start === "" || time.end === ""
+      )
+      if (emptyInputs) {
+        setIsValid((prevState) => ({ ...prevState, noEmptyInputs: false }))
+      } else {
+        setIsValid((prevState) => ({ ...prevState, noEmptyInputs: true }))
+      }
+    }
+
+    if (availableHours.length > 0) {
+      const startBeforeEnd = availableHours.some(
+        (time) => !isStartBeforeEnd(time.start, time.end)
+      )
+      if (startBeforeEnd) {
+        setIsValid((prevState) => ({ ...prevState, startBeforeEnd: false }))
+      } else {
+        setIsValid((prevState) => ({ ...prevState, startBeforeEnd: true }))
+      }
+    }
+  }, [availableHours])
+
+  function handleSubmit(e: React.FormEvent<HTMLButtonElement>) {
+    e.preventDefault()
+    console.log(isValid)
+    function updateErrors() {
+      setErrorMessage({
+        noEmptyInputs: !isValid.noEmptyInputs,
+        noOverlaps: !isValid.noOverlaps,
+        startBeforeEnd: !isValid.startBeforeEnd,
+      })
+    }
+    updateErrors()
+  }
+
+  console.log(errorMessage)
   function addTimes(date: Date) {
     setSelectedDate(date)
     setTimeModal(true)
@@ -34,25 +99,40 @@ export default function SpecialHoursForm() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const newAvailibility = [...availableHours]
-    const fieldName = event.target.name as "startTime" | "endTime"
+    const fieldName = event.target.name as "start" | "end"
     newAvailibility[index][fieldName] = event.target.value
     setAvailableHours(newAvailibility)
-    // resetErrorMessages()
+    resetErrorMessages()
   }
 
   function deleteAvailibility(index: number) {
     const newAvailibility = [...availableHours]
     newAvailibility.splice(index, 1)
     setAvailableHours(newAvailibility)
+    resetErrorMessages()
   }
 
   function addAvailabilityHours() {
     const newAvailibility = [...availableHours]
-    newAvailibility.push({ startTime: "", endTime: "" })
+    newAvailibility.push({ start: "", end: "" })
     setAvailableHours(newAvailibility)
+    resetErrorMessages()
   }
 
-  console.log(selectedDate)
+  function closeModal() {
+    setTimeModal(false)
+    setAvailableHours([])
+    resetErrorMessages()
+  }
+
+  function resetErrorMessages() {
+    setErrorMessage({
+      noEmptyInputs: false,
+      noOverlaps: false,
+      startBeforeEnd: false,
+    })
+  }
+
   return (
     <div className="flex flex-col items-center p-4">
       {timeModal && (
@@ -76,30 +156,30 @@ export default function SpecialHoursForm() {
                   <div className="flex flex-col gap-2">
                     {availableHours.map((time, index) => {
                       const startBeforeEnd = isStartBeforeEnd(
-                        availableHours[index].startTime,
-                        availableHours[index].endTime
+                        availableHours[index].start,
+                        availableHours[index].end
                       )
                       return (
                         <div key={index}>
                           <div className="flex gap-1 sm:gap-4 items-center">
                             <input
                               type="time"
-                              name="startTime"
+                              name="start"
                               className="w-30 sm:w-32 p-2 border border-gray-400 rounded-lg text-sm sm:text-base"
                               onChange={(event) =>
                                 handleTimeChange(index, event)
                               }
-                              value={availableHours[index].startTime}
+                              value={availableHours[index].start}
                             />
                             <p> - </p>
                             <input
                               type="time"
-                              name="endTime"
+                              name="end"
                               className="w-30 sm:w-32 p-2 border border-gray-400 rounded-lg text-sm sm:text-base"
                               onChange={(event) =>
                                 handleTimeChange(index, event)
                               }
-                              value={availableHours[index].endTime}
+                              value={availableHours[index].end}
                             />
                             <button
                               type="button"
@@ -119,8 +199,19 @@ export default function SpecialHoursForm() {
                         </div>
                       )
                     })}
+                    {errorMessage.noEmptyInputs && (
+                      <p className="mt-1 text-red-600">
+                        Time inputs cannot be empty.
+                      </p>
+                    )}
+                    {errorMessage.noOverlaps && (
+                      <p className="mt-1 text-red-600">
+                        Please choose times that do not overlap.
+                      </p>
+                    )}
                   </div>
                 )}
+
                 <button
                   type="button"
                   className={`h-12 py-2 px-4 rounded-md hover:bg-gray-100 self-center sm:self-start`}
@@ -129,17 +220,18 @@ export default function SpecialHoursForm() {
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
               </div>
-              <div className="w-full grid grid-cols-2 gap-6">
+              <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-6">
                 <button
                   type="button"
-                  className="py-2 px-8 rounded-3xl border border-gray-300 text-gray-700 hover:bg-gray-100"
-                  onClick={() => setTimeModal(false)}
+                  className="py-2 px-8 rounded-3xl border border-gray-300 text-gray-700 hover:bg-gray-100 order-2 sm:order-1"
+                  onClick={closeModal}
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
-                  className="py-2 px-8 rounded-3xl bg-blue-600 text-white hover:bg-blue-700"
+                  className="py-2 px-8 rounded-3xl bg-blue-600 text-white hover:bg-blue-700 order-1 sm:order-2"
+                  onClick={handleSubmit}
                 >
                   Apply
                 </button>
