@@ -27,7 +27,7 @@ type ErrorMessage = {
   day: string
   error: { emptyInputs: boolean; overlaps: boolean; startBeforeEnd: boolean }
 }
-export default function AvalibilityForm() {
+export default function WeeklyHoursForm() {
   const { isSignedIn } = useAuth()
 
   const [availibility, setAvailibility] = useState<AvailibilityDay[]>([])
@@ -308,7 +308,7 @@ export default function AvalibilityForm() {
           </div>
         </div>
       )}
-      <div className="mt-20 w-full flex items-center justify-center">
+      <div className="mt-10 w-full flex items-center justify-center">
         <form className="flex flex-col gap-4 p-4 border mb-20">
           <h1 className="text-xl font-semibold text-center">
             Manage Availability
