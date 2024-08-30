@@ -6,12 +6,12 @@ import {
   isStartBeforeEnd,
 } from "@/lib/validation/availabilityValidation"
 
-type AvailibilityTime = {
+export type AvailibilityTime = {
   start: string
   end: string
 }
 
-type AvailibilityData = {
+export type AvailibilityData = {
   day: string
   availibility: AvailibilityTime[]
 }
