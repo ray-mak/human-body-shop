@@ -24,7 +24,6 @@ type AvailibilityResult = {
 async function addAvailibilityServer(
   data: AvailibilityData[]
 ): Promise<AvailibilityResult> {
-  const startTime = performance.now()
   const { userId } = auth()
 
   if (!userId) {
@@ -63,8 +62,6 @@ async function addAvailibilityServer(
   if (overlaps.length > 0) {
     return { error: "Availabilities overlap" }
   }
-
-  const checkValidation = performance.now()
 
   const transaction = async () => {
     await db.availability.deleteMany({
@@ -110,12 +107,6 @@ async function addAvailibilityServer(
 
   try {
     await db.$transaction(transaction)
-    const endTime = performance.now()
-    console.log(
-      checkValidation - startTime,
-      endTime - checkValidation,
-      endTime - startTime
-    )
     return { message: "Availabilities updated successfully" }
   } catch (error) {
     console.error("Error uploading and deleting availabilties ", error)

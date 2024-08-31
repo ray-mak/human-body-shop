@@ -61,6 +61,8 @@ export default function SpecialHoursForm() {
       } else {
         setIsValid((prevState) => ({ ...prevState, noEmptyInputs: true }))
       }
+    } else {
+      setIsValid((prevState) => ({ ...prevState, noEmptyInputs: true }))
     }
 
     if (availableHours.length > 0) {
@@ -86,9 +88,15 @@ export default function SpecialHoursForm() {
       })
     }
     updateErrors()
+    if (isValid.noEmptyInputs && isValid.noOverlaps && isValid.startBeforeEnd) {
+      const hoursData = {
+        date: selectedDate,
+        hours: availableHours,
+      }
+      console.log(hoursData)
+    }
   }
 
-  console.log(errorMessage)
   function addTimes(date: Date) {
     setSelectedDate(date)
     setTimeModal(true)
@@ -141,7 +149,8 @@ export default function SpecialHoursForm() {
           <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
             <div className="p-8 bg-white flex flex-col gap-8 items-center justify-center bg-white z-20 border rounded-lg shadow-xl">
               <div className="w-full">
-                <p className="text-left">
+                <p>What hours are you available?</p>
+                <p className="text-left mt-2 font-semibold">
                   {selectedDate ? format(selectedDate, "EEEE, MMMM d") : ""}
                 </p>
               </div>
