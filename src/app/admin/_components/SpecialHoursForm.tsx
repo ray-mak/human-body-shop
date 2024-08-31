@@ -1,5 +1,6 @@
 "use client"
 
+import addSpecialAvailibility from "@/app/actions/addSpecialAvailibility"
 import {
   doTimesNotOverlap,
   isStartBeforeEnd,
@@ -13,6 +14,11 @@ import Calendar from "react-calendar"
 type AvailableHours = {
   start: string
   end: string
+}
+
+type SpecialAvailability = {
+  date: Date
+  hours: AvailableHours[]
 }
 
 export default function SpecialHoursForm() {
@@ -94,6 +100,27 @@ export default function SpecialHoursForm() {
         hours: availableHours,
       }
       console.log(hoursData)
+      if (hoursData.date && hoursData.date instanceof Date) {
+        const formattedDate = new Date(hoursData.date)
+        console.log(formattedDate)
+        const clientAddSpecialAvailibility = async (
+          data: SpecialAvailability
+        ) => {
+          const { error, message } = await addSpecialAvailibility({
+            ...data,
+            date: formattedDate,
+          })
+
+          if (error) {
+            console.error("Error adding special hours")
+          } else {
+            console.log(message)
+            setTimeModal(false)
+            setAvailableHours([])
+          }
+        }
+        clientAddSpecialAvailibility({ ...hoursData, date: formattedDate })
+      }
     }
   }
 
