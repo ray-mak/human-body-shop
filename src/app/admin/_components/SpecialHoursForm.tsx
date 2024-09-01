@@ -32,9 +32,9 @@ export default function SpecialHoursForm() {
     startBeforeEnd: true,
   })
   const [errorMessage, setErrorMessage] = useState({
-    noEmptyInputs: true,
-    noOverlaps: true,
-    startBeforeEnd: true,
+    noEmptyInputs: false,
+    noOverlaps: false,
+    startBeforeEnd: false,
   })
 
   const tileClassName = ({ date }: { date: Date }) => {
