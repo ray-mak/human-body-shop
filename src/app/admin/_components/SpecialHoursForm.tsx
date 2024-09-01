@@ -38,7 +38,11 @@ export default function SpecialHoursForm() {
   })
 
   const tileClassName = ({ date }: { date: Date }) => {
-    if (selectedDate && date.getDate() === selectedDate.getDate()) {
+    if (
+      selectedDate &&
+      date.getDate() === selectedDate.getDate() &&
+      date.getMonth() === selectedDate.getMonth()
+    ) {
       return "selected-date"
     }
     return ""
