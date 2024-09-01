@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { format, set } from "date-fns"
 import { useEffect, useState } from "react"
 import Calendar from "react-calendar"
+import SpecialHoursList from "./SpecialHoursList"
 
 type AvailableHours = {
   start: string
@@ -285,6 +286,7 @@ export default function SpecialHoursForm() {
           onClickDay={(date) => addTimes(date)}
         />
       </div>
+      <SpecialHoursList />
     </div>
   )
 }
