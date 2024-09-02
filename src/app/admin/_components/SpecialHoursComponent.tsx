@@ -26,7 +26,7 @@ export default function SpecialHoursComponent() {
 
   //create an input type of checkbox
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-4 mb-20">
       <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
         <label className="flex items-center">
           <input

@@ -45,6 +45,7 @@ model Staff {
   appointments Appointment[] @relation("StaffAppointment")
   availabilities Availability[] @relation("RegularAvailability")
   specialAvailabilities SpecialAvailability[] @relation("SpecialAvailability")
+  extendedTimeOff ExtendedTimeOff[] @relation("ExtendedTimeOff")
 }
 
 model Availability {
@@ -67,4 +68,13 @@ model SpecialAvailability {
   isFullDayOff Boolean
   staff Staff @relation("SpecialAvailability",fields: [staffId], references: [clerkStaffId], onDelete: Cascade)
   @@index([staffId], name: "specialAvailability_staffId")
+}
+
+model ExtendedTimeOff {
+  id        String   @id @default(cuid())
+  startDate DateTime
+  endDate   DateTime
+  staffId String
+  staff Staff @relation("ExtendedTimeOff", fields: [staffId], references: [clerkStaffId])
+  @@index([staffId], name: "extendedTimeOff_staffId")
 }
