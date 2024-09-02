@@ -180,3 +180,7 @@
   background: #4f46e5;
   color: white;
 }
+
+.selected-range {
+  background-color: rgb(238 242 255);
+}
