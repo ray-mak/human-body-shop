@@ -290,7 +290,6 @@ export default function SpecialHoursForm() {
           onClickDay={(date) => addTimes(date)}
         />
       </div>
-      <SpecialHoursList />
     </div>
   )
 }

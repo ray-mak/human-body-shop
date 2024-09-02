@@ -3,6 +3,7 @@ import "../../../components/Calendar.css"
 import { useState } from "react"
 import WeeklyHoursForm from "./WeeklyHoursForm"
 import SpecialHoursForm from "./SpecialHoursForm"
+import SpecialHoursComponent from "./SpecialHoursComponent"
 
 export default function AvailibilityComponent() {
   const [viewWeeklyHours, setViewWeeklyHours] = useState<boolean>(true)
@@ -38,7 +39,7 @@ export default function AvailibilityComponent() {
           </button>
         </div>
       </div>
-      {viewWeeklyHours ? <WeeklyHoursForm /> : <SpecialHoursForm />}
+      {viewWeeklyHours ? <WeeklyHoursForm /> : <SpecialHoursComponent />}
     </div>
   )
 }

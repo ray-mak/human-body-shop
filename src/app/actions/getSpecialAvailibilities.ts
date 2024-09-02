@@ -50,6 +50,8 @@ export default async function getSpecialAvailabilities(): Promise<Response> {
           start: availability.startTime,
           end: availability.endTime,
         })
+
+        acc[dateKeyString].hours.sort((a, b) => a.start.localeCompare(b.start))
       } else {
         acc[dateKeyString].isFullDayOff = true
         acc[dateKeyString].hours = []
