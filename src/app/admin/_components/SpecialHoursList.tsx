@@ -13,6 +13,7 @@ import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { format, parse } from "date-fns"
 import { useEffect, useState } from "react"
+import MultipleDaysList from "./MultipleDaysList"
 
 type SpecialAvailability = {
   date: Date
@@ -202,7 +203,7 @@ export default function SpecialHoursList() {
 
   console.log(isValid)
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center gap-6">
       <div className="border p-4 sm:p-6 rounded-lg">
         {editModal && dateToEdit && (
           <div>
@@ -309,7 +310,7 @@ export default function SpecialHoursList() {
             </div>
           </div>
         )}
-        <h1 className="text-lg font-semibold mb-6">Special Hours List</h1>
+        <h2 className="text-lg font-semibold mb-6">Special Hours List</h2>
         <div className="flex flex-col gap-8">
           {specialAvailabilities.map((availability, index) => {
             return (
@@ -357,6 +358,7 @@ export default function SpecialHoursList() {
           })}
         </div>
       </div>
+      <MultipleDaysList />
     </div>
   )
 }
