@@ -103,15 +103,20 @@ export default function SpecialHoursList() {
   }, [isSignedIn])
 
   async function deleteAvailibility(id: string) {
-    const response = await deleteSpecialAvailibility(id)
-    if (response.error) {
-      console.error(response.error)
-    } else {
-      console.log(response.message)
-      const updatedAvailabilities = specialAvailabilities.filter(
-        (availability) => availability.id !== id
-      )
-      setSpecialAvailabilities(updatedAvailabilities)
+    const updatedAvailabilities = specialAvailabilities.filter(
+      (availability) => availability.id !== id
+    )
+    setSpecialAvailabilities(updatedAvailabilities)
+
+    try {
+      const response = await deleteSpecialAvailibility(id)
+      if (response.error) {
+        console.error(response.error)
+      } else {
+        console.log(response.message)
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -312,6 +317,9 @@ export default function SpecialHoursList() {
         )}
         <h2 className="text-lg font-semibold mb-6">Special Hours List</h2>
         <div className="flex flex-col gap-8">
+          {specialAvailabilities.length === 0 && (
+            <p className="text-gray-700 italic">No special hours set.</p>
+          )}
           {specialAvailabilities.map((availability, index) => {
             return (
               <div

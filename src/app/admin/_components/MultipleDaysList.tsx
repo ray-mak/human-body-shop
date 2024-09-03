@@ -1,5 +1,6 @@
 "use client"
 
+import deleteMultipleDaysOff from "@/app/actions/deleteMultipleDaysOff"
 import getMultipleDaysOff from "@/app/actions/getMultipleDaysOff"
 import { useAuth } from "@clerk/nextjs"
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons"
@@ -35,11 +36,28 @@ export default function MultipleDaysList() {
     fetchDaysOff()
   }, [isSignedIn])
 
+  async function handleDelete(id: string) {
+    const updatedDaysOff = daysOff.filter((day) => day.id !== id)
+    setDaysOff(updatedDaysOff)
+    try {
+      const reponse = await deleteMultipleDaysOff(id)
+      if (reponse.error) {
+        console.error(reponse.error)
+      } else if (reponse.message) {
+        console.log(reponse.message)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   console.log(daysOff)
   return (
     <div className="border p-4 sm:p-6 rounded-lg flex flex-col gap-4">
-      <h2 className="text-lg font-semibold mb-6">Days Off List</h2>
-      {daysOff.length === 0 && <p>No upcoming days off.</p>}
+      <h2 className="text-lg font-semibold mb-6">Extended Days Off List</h2>
+      {daysOff.length === 0 && (
+        <p className="text-gray-700 italic">No upcoming extended days off.</p>
+      )}
       {daysOff.map((day) => {
         const start = format(day.startDate, "MMM d, yyyy")
         const end = format(day.endDate, "MMM d, yyyy")
@@ -53,6 +71,7 @@ export default function MultipleDaysList() {
                 type="button"
                 aria-label="delete"
                 className="px-2 rounded-md hover:bg-gray-200"
+                onClick={() => handleDelete(day.id)}
               >
                 <FontAwesomeIcon icon={faTrashCan} />
               </button>

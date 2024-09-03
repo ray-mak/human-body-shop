@@ -26,6 +26,7 @@ export default function SpecialHoursForm() {
   const [selectedDate, setSelectedDate] = useState<Date | null>()
   const [timeModal, setTimeModal] = useState<boolean>(false)
   const [availableHours, setAvailableHours] = useState<AvailableHours[]>([])
+  const [success, setSuccess] = useState<boolean>(false)
   const [isValid, setIsValid] = useState({
     noEmptyInputs: true,
     noOverlaps: true,
@@ -119,7 +120,7 @@ export default function SpecialHoursForm() {
           if (error) {
             console.error("Error adding special hours")
           } else {
-            console.log(message)
+            setSuccess(true)
             setTimeModal(false)
             setAvailableHours([])
           }
@@ -132,6 +133,7 @@ export default function SpecialHoursForm() {
   function addTimes(date: Date) {
     setSelectedDate(date)
     setTimeModal(true)
+    setSuccess(false)
   }
 
   const handleTimeChange = (
@@ -281,7 +283,13 @@ export default function SpecialHoursForm() {
           </div>
         </div>
       )}
-      <div className=" flex flex-col items-center w-full">
+      <div className=" flex flex-col items-center w-full gap-6">
+        {success && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded relative text-center text-sm sm:text-base">
+            <strong className="font-bold">Success!</strong>
+            <span> Your hours have been saved.</span>
+          </div>
+        )}
         <Calendar
           minDate={new Date()}
           view="month"
