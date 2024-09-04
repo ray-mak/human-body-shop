@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import Calendar from "react-calendar"
 import { add, format, isSameMinute } from "date-fns"
-import getAllAvailabilities from "@/app/actions/getAllAvailabilities"
+import getAllAvailabilities from "@/app/actions/availabilities/getAllAvailabilities"
 
 interface DateType {
   justDate: Date | null

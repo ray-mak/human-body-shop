@@ -1,7 +1,7 @@
 "use client"
 
-import { addAvailibilityServer } from "@/app/actions/addAvailibilities"
-import getAvailabilities from "@/app/actions/getAvailabilities"
+import { addAvailibilityServer } from "@/app/actions/availabilities/addAvailibilities"
+import getAvailabilities from "@/app/actions/availabilities/getAvailabilities"
 import {
   findOverlaps,
   isStartBeforeEnd,

@@ -1,6 +1,6 @@
 "use client"
 
-import addMultipleDaysOff from "@/app/actions/addMultipleDaysOff"
+import addMultipleDaysOff from "@/app/actions/availabilities/addMultipleDaysOff"
 import { format, isSameDay } from "date-fns"
 import { useEffect, useState } from "react"
 import Calendar from "react-calendar"

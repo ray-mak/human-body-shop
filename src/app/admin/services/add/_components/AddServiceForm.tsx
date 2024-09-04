@@ -1,14 +1,33 @@
 "use client"
-import { useState } from "react"
+import addService from "@/app/actions/service/addService"
+import { redirect } from "next/navigation"
+import { useEffect, useState } from "react"
+
+type FormData = {
+  name: string
+  price: number
+  clientTime: number
+  bookingTime: number
+  description: string
+}
 
 export default function AddServiceForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     price: 0,
     clientTime: 0,
     bookingTime: 0,
     description: "",
   })
+
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (success) {
+      redirect("/admin/services")
+    }
+  }, [success])
 
   function handleChange(
     event:
@@ -19,12 +38,46 @@ export default function AddServiceForm() {
       ...formData,
       [event.target.name]: event.target.value,
     })
+    setError(null)
   }
 
-  console.log(formData)
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (
+      formData.name &&
+      formData.price &&
+      formData.clientTime &&
+      formData.bookingTime
+    ) {
+      const createService = async (data: FormData) => {
+        try {
+          const { error, message } = await addService(data)
+          if (error) {
+            setError(error)
+            console.error(error)
+          } else {
+            console.log(message)
+            setSuccess(true)
+          }
+        } catch (error) {
+          console.error(error)
+        }
+      }
+      const price = parseFloat(formData.price.toString())
+      const clientTime = Number(formData.clientTime)
+      const bookingTime = Number(formData.bookingTime)
+      createService({
+        ...formData,
+        price,
+        clientTime,
+        bookingTime,
+      })
+    }
+  }
 
   return (
-    <form className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      {error && <p className="text-red-500">{error}</p>}
       <label className="flex flex-col gap-1" htmlFor="name">
         <p className="font-medium">Service Name</p>
         <input
@@ -51,7 +104,7 @@ export default function AddServiceForm() {
           name="price"
           min="0"
           onChange={handleChange}
-          value={formData.price}
+          value={formData.price === 0 ? "" : formData.price}
           required
         />
       </label>
@@ -72,7 +125,7 @@ export default function AddServiceForm() {
           min={0}
           step={1}
           onChange={handleChange}
-          value={formData.clientTime}
+          value={formData.clientTime === 0 ? "" : formData.clientTime}
           required
         />
       </label>
@@ -93,7 +146,7 @@ export default function AddServiceForm() {
           min={0}
           step={1}
           onChange={handleChange}
-          value={formData.bookingTime}
+          value={formData.bookingTime === 0 ? "" : formData.bookingTime}
           required
         />
       </label>
@@ -112,7 +165,10 @@ export default function AddServiceForm() {
           value={formData.description}
         />
       </label>
-      <button className="mt-8 bg-blue-500 text-white py-2 rounded-lg hover:opacity-80">
+      <button
+        type="submit"
+        className="mt-8 bg-blue-500 text-white py-2 rounded-lg hover:opacity-80"
+      >
         Save
       </button>
     </form>

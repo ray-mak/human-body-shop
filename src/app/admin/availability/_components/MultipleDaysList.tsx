@@ -1,7 +1,7 @@
 "use client"
 
-import deleteMultipleDaysOff from "@/app/actions/deleteMultipleDaysOff"
-import getMultipleDaysOff from "@/app/actions/getMultipleDaysOff"
+import deleteMultipleDaysOff from "@/app/actions/availabilities/deleteMultipleDaysOff"
+import getMultipleDaysOff from "@/app/actions/availabilities/getMultipleDaysOff"
 import { useAuth } from "@clerk/nextjs"
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"

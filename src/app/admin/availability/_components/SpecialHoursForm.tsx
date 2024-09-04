@@ -1,6 +1,6 @@
 "use client"
 
-import addSpecialAvailibility from "@/app/actions/addSpecialAvailibility"
+import addSpecialAvailibility from "@/app/actions/availabilities/addSpecialAvailibility"
 import {
   doTimesNotOverlap,
   isStartBeforeEnd,
