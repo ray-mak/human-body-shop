@@ -1,25 +1,112 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Calendar from "react-calendar"
 import { add, format, isSameMinute } from "date-fns"
+import getAllAvailabilities from "@/app/actions/getAllAvailabilities"
 
 interface DateType {
   justDate: Date | null
   dateTime: Date | null
 }
+type WeeklyAvalability = {
+  day: string
+  dayOfWeek: number
+  availibility: TimeData[]
+}
+
+type TimeData = {
+  start: string
+  end: string
+}
+
+type SpecialAvailability = {
+  date: Date
+  hours: { start: string; end: string }[]
+  isFullDayOff: boolean
+  id: string
+}
+
+type MultiDayOff = {
+  id: string
+  startDate: Date
+  endDate: Date
+}
+
+type Availability = {
+  weeklyAvailabilities: WeeklyAvalability[]
+  multipleDaysOff: MultiDayOff[]
+  specialAvailabilities: SpecialAvailability[]
+}
+
+type DisabledTileProps = {
+  date: Date
+  view: string
+}
 
 const CalendarComponent = () => {
+  const [availabilities, setAvailabilities] = useState<Availability>()
   const [selectedDate, setSelectedDate] = useState<DateType>({
     justDate: null,
     dateTime: null,
   })
 
-  const busyTimes = [
-    new Date("2024-08-26T09:30:00"),
-    new Date("2024-08-26T10:00:00"),
-    new Date("2024-08-26T12:30:00"),
-    new Date("2024-08-26T15:00:00"),
-  ]
+  useEffect(() => {
+    const fetchAvailabilities = async () => {
+      try {
+        const response = await getAllAvailabilities(
+          "user_2lDYOChTXgLXkwMLfvgXUzlY0eC"
+        )
+        if (response.error) {
+          console.error(response.error)
+        } else if (response.data) {
+          setAvailabilities(response.data)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchAvailabilities()
+  }, [])
+
+  console.log(availabilities)
+
+  const tileDisabled = ({ date, view }: DisabledTileProps) => {
+    if (view === "month") {
+      if (!availabilities) return false
+      for (let timeOff of availabilities?.multipleDaysOff) {
+        const startDate = new Date(timeOff.startDate)
+        const endDate = new Date(timeOff.endDate)
+        if (date >= startDate && date <= endDate) {
+          return true
+        }
+      }
+
+      for (let day of availabilities.specialAvailabilities) {
+        const specialDate = new Date(day.date)
+        if (
+          specialDate.getFullYear() === date.getFullYear() &&
+          specialDate.getMonth() === date.getMonth() &&
+          specialDate.getDate() === date.getDate() &&
+          day.isFullDayOff
+        ) {
+          return true
+        }
+      }
+
+      const dayOfWeek = date.getDay()
+      for (let day of availabilities.weeklyAvailabilities) {
+        if (day.dayOfWeek === dayOfWeek) {
+          for (const availability of day.availibility) {
+            if (availability.start === "" && availability.end === "") {
+              return true
+            }
+          }
+        }
+      }
+    }
+    return false
+  }
 
   const getTimes = () => {
     if (!selectedDate.justDate) return
@@ -32,11 +119,12 @@ const CalendarComponent = () => {
 
     const times = []
     for (let i = beginning; i <= end; i = add(i, { minutes: interval })) {
-      const isBusy = busyTimes.some((busyTime) => isSameMinute(i, busyTime))
+      times.push(i)
+      // const isBusy = busyTimes.some((busyTime) => isSameMinute(i, busyTime))
 
-      if (!isBusy) {
-        times.push(i)
-      }
+      // if (!isBusy) {
+      //   times.push(i)
+      // }
     }
 
     return times
@@ -55,19 +143,21 @@ const CalendarComponent = () => {
   }
 
   console.log(selectedDate)
+  console.log("test")
   return (
     <div className="flex flex-col items-center p-4 ">
-      {selectedDate.justDate ? (
-        <div className=" flex flex-col items-center w-full">
-          <Calendar
-            minDate={new Date()}
-            view="month"
-            calendarType="gregory"
-            tileClassName={tileClassName}
-            onClickDay={(date) =>
-              setSelectedDate((prev) => ({ ...prev, justDate: date }))
-            }
-          />
+      <div className=" flex flex-col items-center w-full">
+        <Calendar
+          minDate={new Date()}
+          view="month"
+          calendarType="gregory"
+          tileClassName={tileClassName}
+          tileDisabled={tileDisabled}
+          onClickDay={(date) =>
+            setSelectedDate((prev) => ({ ...prev, justDate: date }))
+          }
+        />
+        {selectedDate.justDate && (
           <div
             className="flex flex-col gap-2 max-w-full overflow-auto mt-8"
             style={{ width: "720px" }}
@@ -94,19 +184,8 @@ const CalendarComponent = () => {
               ))}
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center w-full">
-          <Calendar
-            minDate={new Date()}
-            view="month"
-            calendarType="gregory"
-            onClickDay={(date) =>
-              setSelectedDate((prev) => ({ ...prev, justDate: date }))
-            }
-          />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
