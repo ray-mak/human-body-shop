@@ -1,6 +1,7 @@
 import { checkRole } from "@/utils/roles"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import ServiceList from "./add/_components/ServiceList"
 
 export default function ManageAvailibilityPage() {
   if (!checkRole("admin")) {
@@ -8,8 +9,8 @@ export default function ManageAvailibilityPage() {
   }
   return (
     <div>
-      <div className="flex flex-col gap-6 items-center">
-        <div className="w-5/6 mt-20">
+      <div className="flex flex-col gap-6 items-center p-4">
+        <div className="w-full max-w-4xl mt-20">
           <div className="flex items-center">
             <h1 className="text-3xl font-semibold">Services</h1>
             <Link
@@ -19,6 +20,7 @@ export default function ManageAvailibilityPage() {
               Add Service
             </Link>
           </div>
+          <ServiceList />
         </div>
       </div>
     </div>
