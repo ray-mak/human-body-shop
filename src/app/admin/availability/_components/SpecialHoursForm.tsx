@@ -176,7 +176,7 @@ export default function SpecialHoursForm() {
   }
 
   return (
-    <div className="flex flex-col items-center p-4">
+    <div className="flex flex-col items-center p-4 gap-4">
       {timeModal && (
         <div>
           <div className="absolute left-0 top-0 w-full bg-white h-full z-10 opacity-80"></div>
@@ -283,6 +283,7 @@ export default function SpecialHoursForm() {
           </div>
         </div>
       )}
+      <h1 className="text-xl font-semibold">Add Special Hours</h1>
       <div className=" flex flex-col items-center w-full gap-6">
         {success && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded relative text-center text-sm sm:text-base">

@@ -22,8 +22,8 @@ model User {
 model Appointment {
   id        String   @id @default(cuid())
   date      DateTime
-  startTime DateTime
-  endTime   DateTime
+  startTime String
+  endTime   String
   serviceType String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -77,4 +77,15 @@ model ExtendedTimeOff {
   staffId String
   staff Staff @relation("ExtendedTimeOff", fields: [staffId], references: [clerkStaffId])
   @@index([staffId], name: "extendedTimeOff_staffId")
+}
+
+model ServiceType {
+  id        String   @id @default(cuid())
+  name      String @unique
+  description String?
+  clientDuration  Int
+  totalDuration   Int
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

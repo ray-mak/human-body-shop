@@ -1,5 +1,5 @@
 "use client"
-import "../../../components/Calendar.css"
+import "../../../../components/Calendar.css"
 import { useState } from "react"
 import WeeklyHoursForm from "./WeeklyHoursForm"
 import SpecialHoursForm from "./SpecialHoursForm"

@@ -113,7 +113,7 @@ const CalendarComponent = () => {
 
     const { justDate } = selectedDate
 
-    const beginning = add(justDate, { hours: 9 })
+    const beginning = add(justDate, { hours: 10 })
     const end = add(justDate, { hours: 17 })
     const interval = 30
 
