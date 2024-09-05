@@ -184,3 +184,15 @@
 .selected-range {
   background-color: rgb(238 242 255);
 }
+
+@media (max-width: 480px) {
+  .react-calendar__tile {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .react-calendar__tile {
+    font-size: 0.7rem;
+  }
+}
