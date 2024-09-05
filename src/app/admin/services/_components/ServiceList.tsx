@@ -1,6 +1,7 @@
 "use client"
 
 import getServices from "@/app/actions/service/getServices"
+import Link from "next/link"
 import { useEffect, useState } from "react"
 
 type ServiceData = {
@@ -44,9 +45,12 @@ export default function ServiceList() {
         <p className="text-gray-500">{object.clientDuration} Minutes</p>
         <p className="mt-4">{object.description}</p>
         <div className="mt-4 ml-auto">
-          <button className="bg-white rounded-md px-4 py-2 border border-gray-300 hover:bg-gray-200">
+          <Link
+            href={`/admin/services/${object.id}`}
+            className="bg-white rounded-md px-4 py-2 border border-gray-300 hover:bg-gray-200"
+          >
             Edit
-          </button>
+          </Link>
           <button className="bg-red-500 text-white rounded-md px-4 py-2 ml-2 hover:opacity-80">
             Delete
           </button>

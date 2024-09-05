@@ -1,7 +1,7 @@
 import { checkRole } from "@/utils/roles"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import ServiceList from "./add/_components/ServiceList"
+import ServiceList from "./_components/ServiceList"
 
 export default function ManageAvailibilityPage() {
   if (!checkRole("admin")) {

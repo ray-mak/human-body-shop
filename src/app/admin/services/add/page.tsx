@@ -1,6 +1,6 @@
 import { checkRole } from "@/utils/roles"
 import { redirect } from "next/navigation"
-import AddServiceForm from "./_components/AddServiceForm"
+import AddServiceForm from "../_components/AddServiceForm"
 
 export default function AddServicePage() {
   if (!checkRole("admin")) {
