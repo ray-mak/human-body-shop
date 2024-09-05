@@ -1,4 +1,6 @@
 "use client"
+import updateService from "@/app/actions/service/updateService"
+import { db } from "@/lib/db"
 import { redirect } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -8,6 +10,7 @@ type FormData = {
   clientTime: number
   bookingTime: number
   description: string
+  id: string
 }
 
 type PropType = {
@@ -26,6 +29,7 @@ export default function EditServiceForm(props: PropType) {
     clientTime: props.clientDuration,
     bookingTime: props.totalDuration,
     description: props.description || "",
+    id: props.id,
   })
 
   const [error, setError] = useState<string | null>(null)
@@ -49,8 +53,36 @@ export default function EditServiceForm(props: PropType) {
     setError(null)
   }
 
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (
+      formData.name &&
+      formData.price &&
+      formData.clientTime &&
+      formData.bookingTime
+    ) {
+      const callUpdateService = async (data: FormData) => {
+        try {
+          const { error, message } = await updateService(data)
+          if (error) {
+            setError(error)
+            console.error(error)
+          } else {
+            setSuccess(true)
+          }
+        } catch (error) {
+          console.error(error)
+        }
+      }
+      const price = parseFloat(formData.price.toString())
+      const clientTime = Number(formData.clientTime)
+      const bookingTime = Number(formData.bookingTime)
+      callUpdateService({ ...formData, price, clientTime, bookingTime })
+    }
+  }
+
   return (
-    <form className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {error && <p className="text-red-500">{error}</p>}
       <label className="flex flex-col gap-1" htmlFor="name">
         <p className="font-medium">Service Name</p>
