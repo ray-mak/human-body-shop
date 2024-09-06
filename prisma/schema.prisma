@@ -13,7 +13,7 @@ model User {
   clerkUserId String @unique
   email     String   @unique
   name      String?
-  phone     String
+  phone     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   appointments Appointment[] @relation("UserAppointment")

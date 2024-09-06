@@ -1,14 +1,15 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import getServices from "../actions/service/getServices"
-import SelectService from "./_components/SelectService"
-import getAllAvailabilities from "../actions/availabilities/getAllAvailabilities"
-import SelectDateTime from "./_components/SelectDateTime"
-import "../../components/Calendar.css"
-import { set } from "date-fns"
+import getServices from "../../actions/service/getServices"
+import SelectService from "../_components/SelectService"
+import getAllAvailabilities from "../../actions/availabilities/getAllAvailabilities"
+import SelectDateTime from "../_components/SelectDateTime"
+import "../../../components/Calendar.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
+import { SignIn, useAuth } from "@clerk/nextjs"
+import ConfirmBooking from "../_components/ConfirmBooking"
 
 type ServiceData = {
   id: string
@@ -55,16 +56,13 @@ interface DateType {
 }
 
 export default function BookNowPage() {
+  const { isSignedIn } = useAuth()
   const [services, setServices] = useState<ServiceData[]>([])
   const [availabilities, setAvailabilities] = useState<Availability>()
   const [step, setStep] = useState<number>(0)
-  const [title, setTitle] = useState<string[]>([
-    "Services",
-    "Select Date & Time",
-  ])
-  const [bookingInfo, setBookingInfo] = useState({
-    serviceId: "",
-  })
+  const title = ["Services", "Select Date & Time"]
+  const [showSignIn, setShowSignIn] = useState<boolean>(false)
+  const [serviceId, setServiceId] = useState("")
   const [selectedDate, setSelectedDate] = useState<DateType>({
     justDate: null,
     dateTime: null,
@@ -87,6 +85,24 @@ export default function BookNowPage() {
   }, [])
 
   useEffect(() => {
+    const storedServiceId = sessionStorage.getItem("serviceId")
+    const storedStep = sessionStorage.getItem("step")
+    const storedSelectedDate = sessionStorage.getItem("selectedDate")
+
+    if (storedServiceId) {
+      setServiceId(storedServiceId)
+    }
+
+    if (storedStep) {
+      setStep(parseInt(storedStep))
+    }
+
+    if (storedSelectedDate) {
+      setSelectedDate(JSON.parse(storedSelectedDate))
+    }
+  }, [])
+
+  useEffect(() => {
     const fetchAvailabilities = async () => {
       try {
         const response = await getAllAvailabilities(
@@ -103,21 +119,16 @@ export default function BookNowPage() {
     }
 
     fetchAvailabilities()
-  }, [bookingInfo])
+  }, [serviceId])
 
   function chooseService(serviceId: string) {
-    setBookingInfo({
-      ...bookingInfo,
-      serviceId,
-    })
+    setServiceId(serviceId)
     setStep(1)
   }
 
   function goBack() {
     setStep(0)
-    setBookingInfo({
-      serviceId: "",
-    })
+    setServiceId("")
     setSelectedDate({
       justDate: null,
       dateTime: null,
@@ -130,9 +141,15 @@ export default function BookNowPage() {
 
   function chooseTime(time: Date) {
     setSelectedDate((prev) => ({ ...prev, dateTime: time }))
+    setStep(2)
+    if (!isSignedIn) {
+      sessionStorage.setItem("serviceId", serviceId)
+      sessionStorage.setItem("step", "2")
+      sessionStorage.setItem("selectedDate", JSON.stringify(selectedDate))
+    }
   }
 
-  console.log(bookingInfo, selectedDate)
+  console.log(serviceId, selectedDate)
   return (
     <div className="flex">
       <div className="mt-20 md:mt-28 w-full flex flex-col gap-4 items-center justify-center p-4">
@@ -162,6 +179,19 @@ export default function BookNowPage() {
               chooseTime={chooseTime}
             />
           )}
+          {step === 2 && !isSignedIn && (
+            <div className="flex justify-center">
+              <SignIn
+                path="/book-now"
+                routing="path"
+                signUpUrl="/sign-up"
+                transferable={true}
+                forceRedirectUrl="/book-now"
+                signUpForceRedirectUrl="/book-now"
+              />
+            </div>
+          )}
+          {step == 2 && isSignedIn && <ConfirmBooking />}
         </div>
       </div>
     </div>

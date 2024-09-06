@@ -1,7 +1,7 @@
 "use client"
 
 import Calendar from "react-calendar"
-import { Availability } from "../page"
+import { Availability } from "../[[...book-now]]/page"
 import { useState } from "react"
 import { add, format } from "date-fns"
 

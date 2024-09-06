@@ -52,7 +52,6 @@ export const checkUser = async () => {
         clerkUserId: user.id,
         email: user.emailAddresses[0].emailAddress,
         name: user.firstName,
-        phone: user.phoneNumbers[0].phoneNumber,
       },
     })
 
