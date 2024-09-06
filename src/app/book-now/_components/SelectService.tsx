@@ -11,7 +11,7 @@ type ServiceData = {
 
 type SelectServiceProps = {
   services: ServiceData[]
-  chooseService: (serviceId: string) => void
+  chooseService: (index: number) => void
 }
 
 export default function SelectService({
@@ -20,7 +20,7 @@ export default function SelectService({
 }: SelectServiceProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {services.map((object) => {
+      {services.map((object, index) => {
         return (
           <div
             key={object.id}
@@ -35,7 +35,7 @@ export default function SelectService({
             <div className="mt-4 ml-auto"></div>
             <button
               type="button"
-              onClick={() => chooseService(object.id)}
+              onClick={() => chooseService(index)}
               className="mt-4 ml-auto py-2 px-4 bg-blue-600 rounded text-white hover:opacity-80"
             >
               Select Service

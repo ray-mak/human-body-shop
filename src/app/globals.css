@@ -22,6 +22,15 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+.back-button svg {
+  transition: 0.3s;
+}
+
+.back-button:hover svg {
+  transform: translateX(-5px);
+  transition: 0.3s;
+}
+
 @media (max-width: 768px) {
   .navbar {
     position: fixed;

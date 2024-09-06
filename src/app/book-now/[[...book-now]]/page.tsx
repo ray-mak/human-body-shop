@@ -11,7 +11,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import { SignIn, useAuth } from "@clerk/nextjs"
 import ConfirmBooking from "../_components/ConfirmBooking"
 
-type ServiceData = {
+export type ServiceData = {
   id: string
   name: string
   description: string | null
@@ -50,9 +50,14 @@ export type TimeData = {
   end: string
 }
 
-interface DateType {
+export type DateType = {
   justDate: Date | null
   dateTime: Date | null
+}
+
+export type ConfirmationData = {
+  notes: string
+  phoneNumber: string | undefined
 }
 
 export default function BookNowPage() {
@@ -61,12 +66,23 @@ export default function BookNowPage() {
   const [availabilities, setAvailabilities] = useState<Availability>()
   const [step, setStep] = useState<number>(0)
   const title = ["Services", "Select Date & Time"]
-  const [showSignIn, setShowSignIn] = useState<boolean>(false)
-  const [serviceId, setServiceId] = useState("")
+  const [selectedService, setSelectedService] = useState<ServiceData>()
   const [selectedDate, setSelectedDate] = useState<DateType>({
     justDate: null,
     dateTime: null,
   })
+  const [confirmationData, setConfirmationData] = useState<ConfirmationData>({
+    notes: "",
+    phoneNumber: "",
+  })
+
+  function handleNumberChange(value: string | undefined) {
+    setConfirmationData({ ...confirmationData, phoneNumber: value })
+  }
+
+  function handleNotesChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    setConfirmationData({ ...confirmationData, notes: event.target.value })
+  }
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -90,15 +106,18 @@ export default function BookNowPage() {
     const storedSelectedDate = sessionStorage.getItem("selectedDate")
 
     if (storedServiceId) {
-      setServiceId(storedServiceId)
+      setSelectedDate(JSON.parse(storedServiceId))
+      sessionStorage.removeItem("serviceId")
     }
 
     if (storedStep) {
       setStep(parseInt(storedStep))
+      sessionStorage.removeItem("step")
     }
 
     if (storedSelectedDate) {
       setSelectedDate(JSON.parse(storedSelectedDate))
+      sessionStorage.removeItem("selectedDate")
     }
   }, [])
 
@@ -119,16 +138,16 @@ export default function BookNowPage() {
     }
 
     fetchAvailabilities()
-  }, [serviceId])
+  }, [selectedService])
 
-  function chooseService(serviceId: string) {
-    setServiceId(serviceId)
+  function chooseService(index: number) {
+    setSelectedService(services[index])
     setStep(1)
   }
 
   function goBack() {
     setStep(0)
-    setServiceId("")
+    setSelectedService(undefined)
     setSelectedDate({
       justDate: null,
       dateTime: null,
@@ -143,13 +162,13 @@ export default function BookNowPage() {
     setSelectedDate((prev) => ({ ...prev, dateTime: time }))
     setStep(2)
     if (!isSignedIn) {
-      sessionStorage.setItem("serviceId", serviceId)
+      sessionStorage.setItem("selectedService", JSON.stringify(selectedService))
       sessionStorage.setItem("step", "2")
       sessionStorage.setItem("selectedDate", JSON.stringify(selectedDate))
     }
   }
 
-  console.log(serviceId, selectedDate)
+  console.log(selectedService)
   return (
     <div className="flex">
       <div className="mt-20 md:mt-28 w-full flex flex-col gap-4 items-center justify-center p-4">
@@ -191,7 +210,15 @@ export default function BookNowPage() {
               />
             </div>
           )}
-          {step == 2 && isSignedIn && <ConfirmBooking />}
+          {step == 2 && isSignedIn && selectedService && (
+            <ConfirmBooking
+              selectedDate={selectedDate}
+              selectedService={selectedService}
+              confirmationData={confirmationData}
+              handleNumberChange={handleNumberChange}
+              handleNotesChange={handleNotesChange}
+            />
+          )}
         </div>
       </div>
     </div>
