@@ -10,6 +10,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import { SignIn, useAuth } from "@clerk/nextjs"
 import ConfirmBooking from "../_components/ConfirmBooking"
+import { isPossiblePhoneNumber } from "react-phone-number-input"
+import { set } from "date-fns"
+import { error } from "console"
 
 export type ServiceData = {
   id: string
@@ -58,6 +61,12 @@ export type DateType = {
 export type ConfirmationData = {
   notes: string
   phoneNumber: string | undefined
+  cancellation: boolean
+}
+
+export type ErrorMessages = {
+  phone: boolean
+  cancellation: boolean
 }
 
 export default function BookNowPage() {
@@ -74,15 +83,37 @@ export default function BookNowPage() {
   const [confirmationData, setConfirmationData] = useState<ConfirmationData>({
     notes: "",
     phoneNumber: "",
+    cancellation: false,
+  })
+  const [isValid, setIsValid] = useState<ErrorMessages>({
+    phone: false,
+    cancellation: false,
+  })
+  const [errorMessages, setErrorMessages] = useState<ErrorMessages>({
+    phone: false,
+    cancellation: false,
   })
 
-  function handleNumberChange(value: string | undefined) {
-    setConfirmationData({ ...confirmationData, phoneNumber: value })
-  }
+  useEffect(() => {
+    if (
+      !confirmationData.phoneNumber ||
+      !isPossiblePhoneNumber(confirmationData.phoneNumber)
+    ) {
+      setIsValid((prev) => ({ ...prev, phone: false }))
+    }
+    if (
+      confirmationData.phoneNumber &&
+      isPossiblePhoneNumber(confirmationData.phoneNumber)
+    ) {
+      setIsValid((prev) => ({ ...prev, phone: true }))
+    }
 
-  function handleNotesChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    setConfirmationData({ ...confirmationData, notes: event.target.value })
-  }
+    if (!confirmationData.cancellation) {
+      setIsValid((prev) => ({ ...prev, cancellation: false }))
+    } else if (confirmationData.cancellation) {
+      setIsValid((prev) => ({ ...prev, cancellation: true }))
+    }
+  }, [confirmationData])
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -168,7 +199,42 @@ export default function BookNowPage() {
     }
   }
 
-  console.log(selectedService)
+  function handleNumberChange(value: string | undefined) {
+    setConfirmationData({ ...confirmationData, phoneNumber: value })
+    setErrorMessages({ ...errorMessages, phone: false })
+  }
+
+  function handleNotesChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    setConfirmationData({ ...confirmationData, notes: event.target.value })
+  }
+
+  function handleCancellationChange(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    setConfirmationData((prev) => ({
+      ...prev,
+      cancellation: event.target.checked,
+    }))
+    setErrorMessages({ ...errorMessages, cancellation: false })
+  }
+
+  function returnToDateTime() {
+    setStep(1)
+    setSelectedDate({
+      justDate: null,
+      dateTime: null,
+    })
+  }
+
+  function handleConfirm() {
+    setErrorMessages({
+      phone: !isValid.phone,
+      cancellation: !isValid.cancellation,
+    })
+
+    console.log(isValid, errorMessages, confirmationData.phoneNumber)
+  }
+
   return (
     <div className="flex">
       <div className="mt-20 md:mt-28 w-full flex flex-col gap-4 items-center justify-center p-4">
@@ -180,7 +246,7 @@ export default function BookNowPage() {
             {step === 1 && (
               <button
                 onClick={goBack}
-                className="text-blue-600 font-medium hover:underline ml-auto"
+                className="back-button text-blue-600 font-medium hover:underline ml-auto"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
                 Back
@@ -217,6 +283,10 @@ export default function BookNowPage() {
               confirmationData={confirmationData}
               handleNumberChange={handleNumberChange}
               handleNotesChange={handleNotesChange}
+              handleCancellationChange={handleCancellationChange}
+              returnToDateTime={returnToDateTime}
+              errorMessages={errorMessages}
+              handleConfirm={handleConfirm}
             />
           )}
         </div>

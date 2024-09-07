@@ -3,7 +3,7 @@
 import Calendar from "react-calendar"
 import { Availability } from "../[[...book-now]]/page"
 import { useState } from "react"
-import { add, format } from "date-fns"
+import { add, format, isSameDay } from "date-fns"
 
 type AvailabilityProp = {
   availabilities: Availability
@@ -87,9 +87,14 @@ export default function SelectDateTime({
     const end = add(justDate, { hours: 17 })
     const interval = 30
 
+    const today = new Date()
+    const isToday = isSameDay(today, justDate)
+
     const times = []
     for (let i = beginning; i <= end; i = add(i, { minutes: interval })) {
-      times.push(i)
+      if (!isToday || i > today) {
+        times.push(i)
+      }
       // const isBusy = busyTimes.some((busyTime) => isSameMinute(i, busyTime))
 
       // if (!isBusy) {
@@ -99,8 +104,6 @@ export default function SelectDateTime({
 
     return times
   }
-
-  const times = getTimes()
 
   const categorizeTimes = (times: Date[]) => {
     const morning: Date[] = []
@@ -125,6 +128,16 @@ export default function SelectDateTime({
     if (!times) return null
 
     const { morning, afternoon, evening } = categorizeTimes(times)
+
+    if (
+      morning.length === 0 &&
+      afternoon.length === 0 &&
+      evening.length === 0
+    ) {
+      return (
+        <p className="text-gray-600">No more availabilities for this day</p>
+      )
+    }
 
     return (
       <div className="flex flex-col gap-2">

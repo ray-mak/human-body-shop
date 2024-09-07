@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import PhoneInput, { isPossiblePhoneNumber } from "react-phone-number-input"
+import PhoneInput from "react-phone-number-input"
 import "react-phone-number-input/style.css"
 import "../../../styles/PhoneInput.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -9,6 +9,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import {
   ConfirmationData,
   DateType,
+  ErrorMessages,
   ServiceData,
 } from "../[[...book-now]]/page"
 import { format } from "date-fns"
@@ -19,6 +20,10 @@ type BookingProps = {
   confirmationData: ConfirmationData
   handleNumberChange: (value: string | undefined) => void
   handleNotesChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
+  handleCancellationChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  returnToDateTime: () => void
+  errorMessages: ErrorMessages
+  handleConfirm: () => void
 }
 
 export default function ConfirmBooking({
@@ -27,6 +32,10 @@ export default function ConfirmBooking({
   confirmationData,
   handleNumberChange,
   handleNotesChange,
+  handleCancellationChange,
+  returnToDateTime,
+  errorMessages,
+  handleConfirm,
 }: BookingProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -49,7 +58,7 @@ export default function ConfirmBooking({
             aria-label="Any special requests or things you'd like us to know?"
           />
         </label>
-        <div>
+        <div className="relative">
           <p className="text-lg font-semibold mb-2">
             Phone Number{" "}
             <span className="text-sm text-gray-500 font-normal">
@@ -61,7 +70,15 @@ export default function ConfirmBooking({
             defaultCountry="US"
             value={confirmationData.phoneNumber}
             onChange={(value) => handleNumberChange(value)}
+            className={`border rounded ${
+              errorMessages.phone ? "border-red-600" : ""
+            }`}
           />
+          {errorMessages.phone && (
+            <p className="absolute text-sm right-0 text-red-600 mt-1">
+              Please enter a valid number
+            </p>
+          )}
         </div>
         <div>
           <p className="text-lg font-semibold mb-2">Cancellation Policy</p>
@@ -73,14 +90,23 @@ export default function ConfirmBooking({
             I have been able to maintain a non-cancelation fee policy and with
             your help I can maintain this policy.
           </p>
-          <label htmlFor="cancellation" className="flex items-center mt-4">
+          <label
+            htmlFor="cancellation"
+            className="flex items-center mt-4 cursor-pointer"
+          >
             <input
               type="checkbox"
               id="cancellation"
               name="cancellation"
               className="mr-2"
+              checked={confirmationData.cancellation}
+              onChange={handleCancellationChange}
             />
-            <span className="text-gray-600">
+            <span
+              className={`${
+                errorMessages.cancellation ? "text-red-600" : "text-gray-600"
+              }`}
+            >
               I understand and agree to the cancellation policy
             </span>
           </label>
@@ -88,7 +114,8 @@ export default function ConfirmBooking({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <button
             type="button"
-            className="order-2 lg:order-1 back-button border py-2 px-4 rounded text-gray-600"
+            className="order-2 lg:order-1 back-button border py-2 px-4 rounded text-gray-600 hover:underline"
+            onClick={returnToDateTime}
           >
             <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
             Back
@@ -96,6 +123,7 @@ export default function ConfirmBooking({
           <button
             type="button"
             className="order-1 lg:order-2 py-2 px-4 bg-blue-600 rounded text-white hover:bg-blue-700"
+            onClick={handleConfirm}
           >
             Confirm Booking
           </button>
