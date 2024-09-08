@@ -12,7 +12,7 @@ import {
   set,
 } from "date-fns"
 
-type AppointmentData = {
+export type AppointmentData = {
   serviceType: string
   date: Date
   time: string
@@ -57,19 +57,20 @@ export default async function createAppointment(
     },
   })
 
-  const appointmentStartTime = parse(time, "HH:mm", new Date())
+  const appointmentStartTime = parse(time, "HH:mm", new Date(date))
   const appointmentEndTime = addMinutes(appointmentStartTime, clientDuration)
 
   const conflictingAppointments = appointmentDates.some((appointment) => {
     const existingAppointmentStartTime = parse(
       appointment.startTime,
       "HH:mm",
-      new Date()
+      new Date(date)
     )
+
     const existingAppointmentEndTime = parse(
       appointment.endTime,
       "HH:mm",
-      new Date()
+      new Date(date)
     )
 
     const startsBeforeEnd = isBefore(
@@ -113,9 +114,14 @@ export default async function createAppointment(
   })
 
   if (specialHours.length > 0) {
+    const isFullDayOff = specialHours.some((hours) => hours.isFullDayOff)
+    if (isFullDayOff) {
+      return { error: "Appointment date is during full day off" }
+    }
+
     const isWithinSpecialHours = specialHours.some((hours) => {
-      const specialStartTime = parse(hours.startTime, "HH:mm", new Date())
-      const specialEndTime = parse(hours.endTime, "HH:mm", new Date())
+      const specialStartTime = parse(hours.startTime, "HH:mm", new Date(date))
+      const specialEndTime = parse(hours.endTime, "HH:mm", new Date(date))
 
       return (
         isBefore(appointmentStartTime, specialEndTime) &&
@@ -135,8 +141,8 @@ export default async function createAppointment(
     })
 
     const isWithinRegularHours = regularHours.some((hours) => {
-      const regularStartTime = parse(hours.startTime, "HH:mm", new Date())
-      const regularEndTime = parse(hours.endTime, "HH:mm", new Date())
+      const regularStartTime = parse(hours.startTime, "HH:mm", new Date(date))
+      const regularEndTime = parse(hours.endTime, "HH:mm", new Date(date))
 
       return (
         isBefore(appointmentStartTime, regularEndTime) &&
@@ -168,7 +174,7 @@ export default async function createAppointment(
 
     await db.user.update({
       where: {
-        id: userId,
+        clerkUserId: userId,
       },
       data: {
         phone: phoneNumber,

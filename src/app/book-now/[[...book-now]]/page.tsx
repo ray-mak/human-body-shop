@@ -11,6 +11,11 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import { SignIn, useAuth } from "@clerk/nextjs"
 import ConfirmBooking from "../_components/ConfirmBooking"
 import { isPossiblePhoneNumber } from "react-phone-number-input"
+import createAppointment, {
+  AppointmentData,
+} from "@/app/actions/appointments/createAppointment"
+import { redirect } from "next/navigation"
+import { format } from "date-fns"
 
 export type ServiceData = {
   id: string
@@ -230,7 +235,35 @@ export default function BookNowPage() {
       cancellation: !isValid.cancellation,
     })
 
-    console.log(isValid, errorMessages, confirmationData.phoneNumber)
+    if (
+      selectedService?.name &&
+      selectedService.clientDuration &&
+      selectedService.totalDuration &&
+      selectedDate.justDate &&
+      selectedDate.dateTime &&
+      confirmationData.phoneNumber !== ""
+    ) {
+      const addAppointment = async (data: AppointmentData) => {
+        const { error, message } = await createAppointment(data)
+        if (error) {
+          console.error(error)
+        } else if (message) {
+          console.log(message)
+        }
+      }
+      const timeString = format(selectedDate.dateTime, "HH:mm")
+      const appointmentData = {
+        serviceType: selectedService.name,
+        date: selectedDate.justDate,
+        time: timeString,
+        notes: confirmationData.notes,
+        phoneNumber: confirmationData.phoneNumber || "",
+        clientDuration: selectedService.clientDuration,
+        totalDuration: selectedService.totalDuration,
+      }
+      console.log(appointmentData)
+      addAppointment(appointmentData)
+    }
   }
 
   return (
