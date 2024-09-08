@@ -1,4 +1,5 @@
 "use client"
+//Need to handle success state and add loading
 
 import { useEffect, useState } from "react"
 import getServices from "../../actions/service/getServices"
@@ -16,6 +17,7 @@ import createAppointment, {
 } from "@/app/actions/appointments/createAppointment"
 import { redirect } from "next/navigation"
 import { format } from "date-fns"
+import getSpecialist, { Specialist } from "@/app/actions/service/getSpecialist"
 
 export type ServiceData = {
   id: string
@@ -78,6 +80,8 @@ export default function BookNowPage() {
   const [availabilities, setAvailabilities] = useState<Availability>()
   const [step, setStep] = useState<number>(0)
   const title = ["Services", "Select Date & Time"]
+  const [specialistList, setSpecialistList] = useState<Specialist[]>([])
+  const [selectedSpecialist, setSelectedSpecialist] = useState<string>()
   const [selectedService, setSelectedService] = useState<ServiceData>()
   const [selectedDate, setSelectedDate] = useState<DateType>({
     justDate: null,
@@ -96,6 +100,7 @@ export default function BookNowPage() {
     phone: false,
     cancellation: false,
   })
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (
@@ -131,13 +136,36 @@ export default function BookNowPage() {
         console.error(error)
       }
     }
+
+    const fetchSpecialists = async () => {
+      try {
+        const response = await getSpecialist()
+        if (response.error) {
+          console.error(response.error)
+        } else if (response.specialists) {
+          setSpecialistList(response.specialists)
+          if (response.specialists.length === 1) {
+            setSelectedSpecialist(response.specialists[0].clerkStaffId)
+          }
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
     fetchServices()
+    fetchSpecialists()
   }, [])
+
+  function handleSpecialistChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    setSelectedSpecialist(event.target.value)
+  }
 
   useEffect(() => {
     const storedServiceId = sessionStorage.getItem("serviceId")
     const storedStep = sessionStorage.getItem("step")
     const storedSelectedDate = sessionStorage.getItem("selectedDate")
+    const storedSpecialist = sessionStorage.getItem("selectedSpecialist")
 
     if (storedServiceId) {
       setSelectedDate(JSON.parse(storedServiceId))
@@ -153,18 +181,23 @@ export default function BookNowPage() {
       setSelectedDate(JSON.parse(storedSelectedDate))
       sessionStorage.removeItem("selectedDate")
     }
+
+    if (storedSpecialist) {
+      setSelectedSpecialist(storedSpecialist)
+      sessionStorage.removeItem("selectedSpecialist")
+    }
   }, [])
 
   useEffect(() => {
     const fetchAvailabilities = async () => {
       try {
-        const response = await getAllAvailabilities(
-          "user_2lDYOChTXgLXkwMLfvgXUzlY0eC"
-        )
-        if (response.error) {
-          console.error(response.error)
-        } else if (response.data) {
-          setAvailabilities(response.data)
+        if (selectedSpecialist) {
+          const response = await getAllAvailabilities(selectedSpecialist)
+          if (response.error) {
+            console.error(response.error)
+          } else if (response.data) {
+            setAvailabilities(response.data)
+          }
         }
       } catch (error) {
         console.error(error)
@@ -199,6 +232,7 @@ export default function BookNowPage() {
       sessionStorage.setItem("selectedService", JSON.stringify(selectedService))
       sessionStorage.setItem("step", "2")
       sessionStorage.setItem("selectedDate", JSON.stringify(selectedDate))
+      sessionStorage.setItem("selectedSpecialist", selectedSpecialist || "")
     }
   }
 
@@ -227,6 +261,7 @@ export default function BookNowPage() {
       justDate: null,
       dateTime: null,
     })
+    setError(null)
   }
 
   function handleConfirm() {
@@ -247,6 +282,7 @@ export default function BookNowPage() {
         const { error, message } = await createAppointment(data)
         if (error) {
           console.error(error)
+          setError(error)
         } else if (message) {
           console.log(message)
         }
@@ -265,6 +301,8 @@ export default function BookNowPage() {
       addAppointment(appointmentData)
     }
   }
+
+  console.log(specialistList, selectedSpecialist)
 
   return (
     <div className="flex">
@@ -285,7 +323,13 @@ export default function BookNowPage() {
             )}
           </div>
           {step === 0 && (
-            <SelectService services={services} chooseService={chooseService} />
+            <SelectService
+              services={services}
+              chooseService={chooseService}
+              specialistList={specialistList}
+              handleSpecialistChange={handleSpecialistChange}
+              selectedSpecialist={selectedSpecialist}
+            />
           )}
           {step === 1 && availabilities && (
             <SelectDateTime
@@ -318,6 +362,7 @@ export default function BookNowPage() {
               returnToDateTime={returnToDateTime}
               errorMessages={errorMessages}
               handleConfirm={handleConfirm}
+              error={error}
             />
           )}
         </div>

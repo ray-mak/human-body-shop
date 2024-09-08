@@ -28,6 +28,7 @@ export default function SelectDateTime({
   chooseDate,
   chooseTime,
 }: AvailabilityProp) {
+  console.log(availabilities)
   const tileDisabled = ({ date, view }: DisabledTileProps) => {
     if (view === "month") {
       if (!availabilities) return false

@@ -24,6 +24,7 @@ type BookingProps = {
   returnToDateTime: () => void
   errorMessages: ErrorMessages
   handleConfirm: () => void
+  error: string | null
 }
 
 export default function ConfirmBooking({
@@ -36,6 +37,7 @@ export default function ConfirmBooking({
   returnToDateTime,
   errorMessages,
   handleConfirm,
+  error,
 }: BookingProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -166,6 +168,12 @@ export default function ConfirmBooking({
             </p>
           </div>
         </div>
+        {error && (
+          <div className="order-3 col-span-2 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative text-center text-sm sm:text-base mt-8">
+            <strong className="font-bold">Error!</strong>
+            <span> {error}</span>
+          </div>
+        )}
       </div>
     </div>
   )
