@@ -11,8 +11,6 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import { SignIn, useAuth } from "@clerk/nextjs"
 import ConfirmBooking from "../_components/ConfirmBooking"
 import { isPossiblePhoneNumber } from "react-phone-number-input"
-import { set } from "date-fns"
-import { error } from "console"
 
 export type ServiceData = {
   id: string
