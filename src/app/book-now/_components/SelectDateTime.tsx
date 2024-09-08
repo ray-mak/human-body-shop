@@ -3,13 +3,15 @@
 import Calendar from "react-calendar"
 import { Availability } from "../[[...book-now]]/page"
 import { useState } from "react"
-import { add, format, isSameDay } from "date-fns"
+import { add, format, isSameDay, set } from "date-fns"
+import { Appointment } from "@/app/actions/service/getSpecialist"
 
 type AvailabilityProp = {
   availabilities: Availability
   selectedDate: DateType
   chooseDate: (date: Date) => void
   chooseTime: (time: Date) => void
+  specialistAppointments: Appointment[] | undefined
 }
 
 interface DateType {
@@ -27,6 +29,7 @@ export default function SelectDateTime({
   selectedDate,
   chooseDate,
   chooseTime,
+  specialistAppointments,
 }: AvailabilityProp) {
   console.log(availabilities)
   const tileDisabled = ({ date, view }: DisabledTileProps) => {
@@ -83,27 +86,104 @@ export default function SelectDateTime({
     if (!selectedDate.justDate) return
 
     const { justDate } = selectedDate
-
-    const beginning = add(justDate, { hours: 10 })
-    const end = add(justDate, { hours: 17 })
     const interval = 30
-
     const today = new Date()
     const isToday = isSameDay(today, justDate)
 
-    const times = []
-    for (let i = beginning; i <= end; i = add(i, { minutes: interval })) {
-      if (!isToday || i > today) {
-        times.push(i)
-      }
-      // const isBusy = busyTimes.some((busyTime) => isSameMinute(i, busyTime))
+    const specialAvailabilities = availabilities.specialAvailabilities.find(
+      (availability) => isSameDay(availability.date, justDate)
+    )
 
-      // if (!isBusy) {
-      //   times.push(i)
-      // }
+    const appointmentsForDate = specialistAppointments?.filter((appointment) =>
+      isSameDay(appointment.date, justDate)
+    )
+
+    if (specialAvailabilities) {
+      const times: Date[] = []
+
+      specialAvailabilities.hours.forEach(({ start, end }) => {
+        const startTime = set(justDate, {
+          hours: parseInt(start.split(":")[0]),
+          minutes: parseInt(start.split(":")[1]),
+        })
+        const endTime = set(justDate, {
+          hours: parseInt(end.split(":")[0]),
+          minutes: parseInt(end.split(":")[1]),
+        })
+
+        for (
+          let i = startTime;
+          i <= endTime;
+          i = add(i, { minutes: interval })
+        ) {
+          if ((!isToday || i > today) && appointmentsForDate) {
+            const isSlotAvailable = !appointmentsForDate.some((appointment) => {
+              const appointmentStartTime = set(justDate, {
+                hours: parseInt(appointment.startTime.split(":")[0], 10),
+                minutes: parseInt(appointment.startTime.split(":")[1], 10),
+              })
+              const appointmentEndTime = set(justDate, {
+                hours: parseInt(appointment.endTime.split(":")[0], 10),
+                minutes: parseInt(appointment.endTime.split(":")[1], 10),
+              })
+              return i >= appointmentStartTime && i < appointmentEndTime
+            })
+
+            if (isSlotAvailable) {
+              times.push(i)
+            }
+          }
+        }
+      })
+      return times
     }
 
+    const dayOfWeek = justDate.getDay()
+    const regularAvailabilities = availabilities.weeklyAvailabilities.find(
+      (availability) => availability.dayOfWeek === dayOfWeek
+    )
+
+    const times: Date[] = []
+    regularAvailabilities?.availibility.forEach(({ start, end }) => {
+      const startTime = set(justDate, {
+        hours: parseInt(start.split(":")[0]),
+        minutes: parseInt(start.split(":")[1]),
+      })
+      const endTime = set(justDate, {
+        hours: parseInt(end.split(":")[0]),
+        minutes: parseInt(end.split(":")[1]),
+      })
+
+      for (let i = startTime; i <= endTime; i = add(i, { minutes: interval })) {
+        if ((!isToday || i > today) && appointmentsForDate) {
+          const isSlotAvailable = !appointmentsForDate.some((appointment) => {
+            const appointmentStartTime = set(justDate, {
+              hours: parseInt(appointment.startTime.split(":")[0], 10),
+              minutes: parseInt(appointment.startTime.split(":")[1], 10),
+            })
+            const appointmentEndTime = set(justDate, {
+              hours: parseInt(appointment.endTime.split(":")[0], 10),
+              minutes: parseInt(appointment.endTime.split(":")[1], 10),
+            })
+            return i >= appointmentStartTime && i < appointmentEndTime
+          })
+
+          if (isSlotAvailable) {
+            times.push(i)
+          }
+        }
+      }
+    })
     return times
+
+    // const times = []
+    // for (let i = beginning; i <= end; i = add(i, { minutes: interval })) {
+    //   if (!isToday || i > today) {
+    //     times.push(i)
+    //   }
+    // }
+
+    // return times
   }
 
   const categorizeTimes = (times: Date[]) => {

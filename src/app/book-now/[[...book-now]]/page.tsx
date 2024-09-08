@@ -17,7 +17,10 @@ import createAppointment, {
 } from "@/app/actions/appointments/createAppointment"
 import { redirect } from "next/navigation"
 import { format } from "date-fns"
-import getSpecialist, { Specialist } from "@/app/actions/service/getSpecialist"
+import getSpecialist, {
+  Appointment,
+  Specialist,
+} from "@/app/actions/service/getSpecialist"
 
 export type ServiceData = {
   id: string
@@ -83,6 +86,8 @@ export default function BookNowPage() {
   const [specialistList, setSpecialistList] = useState<Specialist[]>([])
   const [selectedSpecialist, setSelectedSpecialist] = useState<string>()
   const [selectedService, setSelectedService] = useState<ServiceData>()
+  const [specialistAppointments, setSpecialistAppointments] =
+    useState<Appointment[]>()
   const [selectedDate, setSelectedDate] = useState<DateType>({
     justDate: null,
     dateTime: null,
@@ -207,6 +212,18 @@ export default function BookNowPage() {
     fetchAvailabilities()
   }, [selectedService])
 
+  useEffect(() => {
+    //find the specialist object in specialistList with the same clerkStaffId as selectedSpecialist. Then set the appointments of that specialist to specialistAppointments
+    if (selectedSpecialist) {
+      const specialist = specialistList.find(
+        (specialist) => specialist.clerkStaffId === selectedSpecialist
+      )
+      if (specialist) {
+        setSpecialistAppointments(specialist.appointments)
+      }
+    }
+  }, [selectedSpecialist])
+
   function chooseService(index: number) {
     setSelectedService(services[index])
     setStep(1)
@@ -302,7 +319,7 @@ export default function BookNowPage() {
     }
   }
 
-  console.log(specialistList, selectedSpecialist)
+  console.log(specialistAppointments)
 
   return (
     <div className="flex">
@@ -337,6 +354,7 @@ export default function BookNowPage() {
               selectedDate={selectedDate}
               chooseDate={chooseDate}
               chooseTime={chooseTime}
+              specialistAppointments={specialistAppointments}
             />
           )}
           {step === 2 && !isSignedIn && (
