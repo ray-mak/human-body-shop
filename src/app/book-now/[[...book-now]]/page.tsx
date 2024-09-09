@@ -106,6 +106,7 @@ export default function BookNowPage() {
     cancellation: false,
   })
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<boolean>(false)
 
   useEffect(() => {
     if (
@@ -302,6 +303,7 @@ export default function BookNowPage() {
           setError(error)
         } else if (message) {
           console.log(message)
+          setSuccess(true)
         }
       }
       const timeString = format(selectedDate.dateTime, "HH:mm")
@@ -381,6 +383,7 @@ export default function BookNowPage() {
               errorMessages={errorMessages}
               handleConfirm={handleConfirm}
               error={error}
+              success={success}
             />
           )}
         </div>

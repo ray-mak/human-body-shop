@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import PhoneInput from "react-phone-number-input"
 import "react-phone-number-input/style.css"
 import "../../../styles/PhoneInput.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
+import { faChevronLeft, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
 import {
   ConfirmationData,
   DateType,
@@ -13,6 +13,8 @@ import {
   ServiceData,
 } from "../[[...book-now]]/page"
 import { format } from "date-fns"
+import { faCalendarCheck } from "@fortawesome/free-regular-svg-icons"
+import Link from "next/link"
 
 type BookingProps = {
   selectedDate: DateType
@@ -25,6 +27,7 @@ type BookingProps = {
   errorMessages: ErrorMessages
   handleConfirm: () => void
   error: string | null
+  success: boolean
 }
 
 export default function ConfirmBooking({
@@ -38,143 +41,209 @@ export default function ConfirmBooking({
   errorMessages,
   handleConfirm,
   error,
+  success,
 }: BookingProps) {
+  useEffect(() => {
+    if (success) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [success])
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div className="order-2 lg:order-1 flex flex-col gap-6">
-        <h1 className="text-3xl font-bold py-2 border-b-2">Confirm Booking</h1>
-        <label htmlFor="notes">
-          <span className="text-lg font-semibold">About your appointment</span>
-          <span className="text-sm text-gray-500">
-            {" "}
-            {"("}optional{")"}
-          </span>
-          <textarea
-            id="notes"
-            name="notes"
-            rows={4}
-            value={confirmationData.notes}
-            onChange={handleNotesChange}
-            className="w-full p-2 border rounded mt-2"
-            placeholder="Any special requests or things you'd like us to know?"
-            aria-label="Any special requests or things you'd like us to know?"
-          />
-        </label>
-        <div className="relative">
-          <p className="text-lg font-semibold mb-2">
-            Phone Number{" "}
-            <span className="text-sm text-gray-500 font-normal">
-              {"("}required{")"}
+    <div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="order-2 lg:order-1 flex flex-col gap-6">
+          <h1 className="text-3xl font-bold py-2 border-b-2">
+            Confirm Booking
+          </h1>
+          <label htmlFor="notes">
+            <span className="text-lg font-semibold">
+              About your appointment
             </span>
-          </p>
-          <PhoneInput
-            placeholder="Phone number"
-            defaultCountry="US"
-            value={confirmationData.phoneNumber}
-            onChange={(value) => handleNumberChange(value)}
-            className={`border rounded ${
-              errorMessages.phone ? "border-red-600" : ""
-            }`}
-          />
-          {errorMessages.phone && (
-            <p className="absolute text-sm right-0 text-red-600 mt-1">
-              Please enter a valid number
+            <span className="text-sm text-gray-500">
+              {" "}
+              {"("}optional{")"}
+            </span>
+            <textarea
+              id="notes"
+              name="notes"
+              rows={4}
+              value={confirmationData.notes}
+              onChange={handleNotesChange}
+              className="w-full p-2 border rounded mt-2"
+              placeholder="Any special requests or things you'd like us to know?"
+              aria-label="Any special requests or things you'd like us to know?"
+            />
+          </label>
+          <div className="relative">
+            <p className="text-lg font-semibold mb-2">
+              Phone Number{" "}
+              <span className="text-sm text-gray-500 font-normal">
+                {"("}required{")"}
+              </span>
             </p>
+            <PhoneInput
+              placeholder="Phone number"
+              defaultCountry="US"
+              value={confirmationData.phoneNumber}
+              onChange={(value) => handleNumberChange(value)}
+              className={`border rounded ${
+                errorMessages.phone ? "border-red-600" : ""
+              }`}
+            />
+            {errorMessages.phone && (
+              <p className="absolute text-sm right-0 text-red-600 mt-1">
+                Please enter a valid number
+              </p>
+            )}
+          </div>
+          <div>
+            <p className="text-lg font-semibold mb-2">Cancellation Policy</p>
+            <p className="text-gray-600">
+              Please avoid cancellations, if possible, especially last minute.
+              This is a sole proprietor business and cancellations not only cost
+              me the revenue generated by your patronage but also other possible
+              business that I could have conducted in the time slot you
+              reserved. I have been able to maintain a non-cancelation fee
+              policy and with your help I can maintain this policy.
+            </p>
+            <label
+              htmlFor="cancellation"
+              className="flex items-center mt-4 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                id="cancellation"
+                name="cancellation"
+                className="mr-2"
+                checked={confirmationData.cancellation}
+                onChange={handleCancellationChange}
+              />
+              <span
+                className={`${
+                  errorMessages.cancellation ? "text-red-600" : "text-gray-600"
+                }`}
+              >
+                I understand and agree to the cancellation policy
+              </span>
+            </label>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <button
+              type="button"
+              className="order-2 lg:order-1 back-button border py-2 px-4 rounded text-gray-600 hover:underline"
+              onClick={returnToDateTime}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
+              Back
+            </button>
+            <button
+              type="button"
+              className="order-1 lg:order-2 py-2 px-4 bg-blue-600 rounded text-white hover:bg-blue-700"
+              onClick={handleConfirm}
+            >
+              Confirm Booking
+            </button>
+          </div>
+        </div>
+        <div className="order-1 lg:order-2">
+          <div className="border px-4 py-6 bg-gray-100 rounded-md">
+            <div className="flex flex-col gap-2">
+              <div className="flex">
+                <p className="text-xl font-medium">
+                  {selectedDate.justDate
+                    ? format(selectedDate.justDate, "EEEE, MMMM d")
+                    : ""}
+                </p>
+                <p className="text-xl ml-auto font-medium">
+                  {selectedDate.dateTime
+                    ? format(selectedDate.dateTime, "h:mm a")
+                    : ""}
+                </p>
+              </div>
+              <div className="flex">
+                <p>{selectedService.name}</p>
+                <p className="ml-auto">${selectedService.price.toFixed(2)}</p>
+              </div>
+            </div>
+            <div className="flex border-y my-6 py-4 border-gray-400">
+              <p className="text-lg font-semibold">Total</p>
+              <p className="text-lg font-semibold ml-auto">
+                ${selectedService.price.toFixed(2)}
+              </p>
+            </div>
+            <div className="flex">
+              <p className="text-lg font-semibold">Total Due Now</p>
+              <p className="text-lg font-semibold ml-auto">$0.00</p>
+            </div>
+            <div className="flex mt-2">
+              <p className="text-lg font-semibold">Total Due at Business</p>
+              <p className="text-lg font-semibold ml-auto">
+                ${selectedService.price.toFixed(2)}
+              </p>
+            </div>
+          </div>
+          {error && (
+            <div className="order-3 col-span-2 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative text-center text-sm sm:text-base mt-8">
+              <strong className="font-bold">Error!</strong>
+              <span> {error}</span>
+            </div>
           )}
         </div>
+      </div>
+      {success && (
         <div>
-          <p className="text-lg font-semibold mb-2">Cancellation Policy</p>
-          <p className="text-gray-600">
-            Please avoid cancellations, if possible, especially last minute.
-            This is a sole proprietor business and cancellations not only cost
-            me the revenue generated by your patronage but also other possible
-            business that I could have conducted in the time slot you reserved.
-            I have been able to maintain a non-cancelation fee policy and with
-            your help I can maintain this policy.
-          </p>
-          <label
-            htmlFor="cancellation"
-            className="flex items-center mt-4 cursor-pointer"
-          >
-            <input
-              type="checkbox"
-              id="cancellation"
-              name="cancellation"
-              className="mr-2"
-              checked={confirmationData.cancellation}
-              onChange={handleCancellationChange}
-            />
-            <span
-              className={`${
-                errorMessages.cancellation ? "text-red-600" : "text-gray-600"
-              }`}
-            >
-              I understand and agree to the cancellation policy
-            </span>
-          </label>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <button
-            type="button"
-            className="order-2 lg:order-1 back-button border py-2 px-4 rounded text-gray-600 hover:underline"
-            onClick={returnToDateTime}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
-            Back
-          </button>
-          <button
-            type="button"
-            className="order-1 lg:order-2 py-2 px-4 bg-blue-600 rounded text-white hover:bg-blue-700"
-            onClick={handleConfirm}
-          >
-            Confirm Booking
-          </button>
-        </div>
-      </div>
-      <div className="order-1 lg:order-2">
-        <div className="border px-4 py-6 bg-gray-100 rounded-md">
-          <div className="flex flex-col gap-2">
-            <div className="flex">
-              <p className="text-xl font-medium">
-                {selectedDate.justDate
-                  ? format(selectedDate.justDate, "EEEE, MMMM d")
-                  : ""}
-              </p>
-              <p className="text-xl ml-auto font-medium">
-                {selectedDate.dateTime
-                  ? format(selectedDate.dateTime, "h:mm a")
-                  : ""}
-              </p>
-            </div>
-            <div className="flex">
-              <p>{selectedService.name}</p>
-              <p className="ml-auto">${selectedService.price.toFixed(2)}</p>
+          <div className="absolute left-0 top-0 w-full bg-black h-full z-10 opacity-80"></div>
+          <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
+            <div className="relative m-6 p-6 md:p-12 bg-white flex flex-col gap-8 items-center justify-center bg-white z-20 border rounded-lg">
+              <Link
+                href="/dashboard"
+                className="absolute top-0 right-0 m-4"
+                aria-label="close confirmation window"
+              >
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  style={{ fontSize: "1.5rem" }}
+                />
+              </Link>
+              <FontAwesomeIcon
+                icon={faCalendarCheck}
+                style={{ color: "#28a745", fontSize: "7rem" }}
+              />
+              <div className="flex flex-col gap-1">
+                <p className="text-lg md:text-2xl font-semibold text-center">
+                  Appointment confirmed!
+                </p>
+                <p className="text-lg md:text-2xl font-semibold text-center">
+                  {selectedDate.justDate
+                    ? format(selectedDate.justDate, "MMM d, yyyy")
+                    : ""}{" "}
+                  at{" "}
+                  {selectedDate.dateTime
+                    ? format(selectedDate.dateTime, "h:mm a")
+                    : ""}
+                </p>
+                <p className="mt-2 text-gray-500 text-center">
+                  You're all set! We'll send you a text and email reminder
+                  before your appointments.
+                </p>
+              </div>
+              <Link
+                href="/dashboard"
+                className="py-2 px-8 bg-blue-600 text-white rounded hover:bg-blue-700 mt-8"
+              >
+                Show appointment
+              </Link>
             </div>
           </div>
-          <div className="flex border-y my-6 py-4 border-gray-400">
-            <p className="text-lg font-semibold">Total</p>
-            <p className="text-lg font-semibold ml-auto">
-              ${selectedService.price.toFixed(2)}
-            </p>
-          </div>
-          <div className="flex">
-            <p className="text-lg font-semibold">Total Due Now</p>
-            <p className="text-lg font-semibold ml-auto">$0.00</p>
-          </div>
-          <div className="flex mt-2">
-            <p className="text-lg font-semibold">Total Due at Business</p>
-            <p className="text-lg font-semibold ml-auto">
-              ${selectedService.price.toFixed(2)}
-            </p>
-          </div>
         </div>
-        {error && (
-          <div className="order-3 col-span-2 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative text-center text-sm sm:text-base mt-8">
-            <strong className="font-bold">Error!</strong>
-            <span> {error}</span>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   )
 }
