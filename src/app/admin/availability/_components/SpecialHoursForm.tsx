@@ -209,6 +209,7 @@ export default function SpecialHoursForm() {
                               type="time"
                               name="start"
                               className="w-30 sm:w-32 p-2 border border-gray-400 rounded-lg text-sm sm:text-base"
+                              step="900"
                               onChange={(event) =>
                                 handleTimeChange(index, event)
                               }
@@ -219,6 +220,7 @@ export default function SpecialHoursForm() {
                               type="time"
                               name="end"
                               className="w-30 sm:w-32 p-2 border border-gray-400 rounded-lg text-sm sm:text-base"
+                              step="900"
                               onChange={(event) =>
                                 handleTimeChange(index, event)
                               }

@@ -48,10 +48,13 @@ export default function SelectDateTime({
         if (
           specialDate.getFullYear() === date.getFullYear() &&
           specialDate.getMonth() === date.getMonth() &&
-          specialDate.getDate() === date.getDate() &&
-          day.isFullDayOff
+          specialDate.getDate() === date.getDate()
         ) {
-          return true
+          if (day.isFullDayOff) {
+            return true
+          } else {
+            return false
+          }
         }
       }
 
