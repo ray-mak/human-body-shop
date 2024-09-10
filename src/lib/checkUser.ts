@@ -43,7 +43,16 @@ export const checkUser = async () => {
   })
 
   if (loggedInUser) {
-    return loggedInUser
+    const updatedUser = await db.user.update({
+      where: {
+        clerkUserId: user.id,
+      },
+      data: {
+        email: user.emailAddresses[0].emailAddress,
+        name: user.firstName,
+      },
+    })
+    return updatedUser
   }
 
   if (!loggedInUser && !checkRole("admin")) {

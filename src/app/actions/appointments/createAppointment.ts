@@ -166,6 +166,8 @@ export default async function createAppointment(
         date,
         startTime: time,
         endTime: endTimeString,
+        clientDuration,
+        totalDuration,
         userNote: notes,
         staffId: "user_2lDYOChTXgLXkwMLfvgXUzlY0eC",
         userId,

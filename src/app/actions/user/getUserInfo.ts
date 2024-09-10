@@ -15,8 +15,11 @@ type AppointmentData = {
   id: string
   date: Date
   startTime: string
+  endTime: string
   serviceType: string | null
   userNote: string | null
+  clientDuration: number | null
+  totalDuration: number | null
 }
 
 export default async function getUserInfo(): Promise<{
@@ -42,8 +45,11 @@ export default async function getUserInfo(): Promise<{
             id: true,
             date: true,
             startTime: true,
+            endTime: true,
             serviceType: true,
             userNote: true,
+            totalDuration: true,
+            clientDuration: true,
           },
         },
       },
