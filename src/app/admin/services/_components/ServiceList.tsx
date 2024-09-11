@@ -2,6 +2,8 @@
 
 import deleteService from "@/app/actions/service/deleteService"
 import getServices from "@/app/actions/service/getServices"
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -126,7 +128,13 @@ export default function ServiceList() {
           </div>
         </div>
       )}
-      <h1>Service List</h1>
+      <div className="flex items-center">
+        <h1 className="py-4 font-bold text-lg">Service List</h1>
+        <Link href="/admin" className="back-button bg-white ml-auto">
+          <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
+          Go Back
+        </Link>
+      </div>
       <div className="grid grid-cols-2 gap-6">{serviceCards}</div>
     </div>
   )

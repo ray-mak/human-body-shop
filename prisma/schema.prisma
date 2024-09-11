@@ -24,10 +24,10 @@ model Appointment {
   date      DateTime
   startTime String
   endTime   String
-  serviceType String?
-  userNote  String?
-  totalDuration Int?
-  clientDuration Int?
+  serviceType String
+  userNote  String
+  totalDuration Int
+  clientDuration Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId    String
