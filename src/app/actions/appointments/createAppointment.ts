@@ -11,6 +11,7 @@ import {
   parse,
   set,
 } from "date-fns"
+import { sendSMS } from "@/lib/twilio"
 
 export type AppointmentData = {
   serviceType: string
@@ -182,6 +183,24 @@ export default async function createAppointment(
         phone: phoneNumber,
       },
     })
+
+    const appointmentDate = new Date(date)
+    const [hours, minutes] = time.split(":").map(Number)
+    appointmentDate.setHours(hours, minutes)
+    const formattedAppointmentDate = format(
+      appointmentDate,
+      "M/d/yyyy 'at' h:mm a"
+    )
+
+    // await sendSMS(
+    //   phoneNumber,
+    //   `Your appointment with The Human Body Shop has been scheduled for ${formattedAppointmentDate}.`
+    // )
+
+    // await sendSMS(
+    //   "9519903113",
+    //   `You have a new appointment scheduled for ${formattedAppointmentDate}.`
+    // )
 
     return {
       message: "Appointment created successfully and user phone updated",
