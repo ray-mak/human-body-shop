@@ -4,7 +4,6 @@ import getAppointments, {
   AppointmentData,
 } from "@/app/actions/appointments/getAppointments"
 import { useEffect, useState } from "react"
-import Calendar from "react-calendar"
 import "../../../../styles/AdminScheduleCalendar.css"
 import {
   addDays,
@@ -14,14 +13,12 @@ import {
   startOfWeek,
 } from "date-fns"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faChevronLeft,
-  faChevronRight,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons"
+import { faList, faTimes } from "@fortawesome/free-solid-svg-icons"
 import deleteAppointment from "@/app/actions/appointments/deleteAppointment"
 import { redirect } from "next/navigation"
 import CalendarView from "./CalendarView"
+import { faCalendar } from "@fortawesome/free-regular-svg-icons"
+import ListView from "./ListView"
 
 export default function ScheduleComponent() {
   const [appointments, setAppointments] = useState<AppointmentData[]>()
@@ -145,7 +142,7 @@ export default function ScheduleComponent() {
 
   console.log(appointments, selectedDate)
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col items-center">
       {selectedAppointment && detailModal && (
         <div>
           <div className="absolute left-0 top-0 w-full bg-black h-full z-10 opacity-80"></div>
@@ -153,7 +150,7 @@ export default function ScheduleComponent() {
             {deleteModal ? (
               <div className="flex flex-col bg-white p-6 rounded-lg z-20">
                 <div className="flex justify-between items-center mb-4">
-                  <h1 className="text-xl font-medium">Delete Appointment</h1>
+                  <h1 className="text-xl font-medium">Cancel Appointment</h1>
                   <button
                     onClick={() => setDeleteModal(false)}
                     className="ml-20"
@@ -163,20 +160,20 @@ export default function ScheduleComponent() {
                   </button>
                 </div>
                 <p className="text-gray-600">
-                  Are you sure you want to delete this appointment?
+                  Are you sure you want to cancel this appointment?
                 </p>
                 <div className="flex gap-4 mt-6 ml-auto">
                   <button
                     className="text-gray-600 border-2 border-gray-500 px-4 py-2 rounded-lg hover:bg-gray-100"
                     onClick={() => setDeleteModal(false)}
                   >
-                    Cancel
+                    No, Go Back
                   </button>
                   <button
                     className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
                     onClick={confirmDeleteAppointment}
                   >
-                    Delete
+                    Yes, Delete
                   </button>
                 </div>
               </div>
@@ -237,7 +234,7 @@ export default function ScheduleComponent() {
                     className="bg-red-500 text-white px-4 py-2 rounded-lg mt-4"
                     onClick={openDeleteModal}
                   >
-                    Delete Appointment
+                    Cancel Appointment
                   </button>
                 </div>
               </div>
@@ -245,11 +242,28 @@ export default function ScheduleComponent() {
           </div>
         </div>
       )}
-      <div>
-        <button>List View</button>
+      <div className="rounded-lg border-2 my-2">
+        <button
+          className={` py-2 px-3 rounded-l-lg ${
+            listView ? "bg-gray-100" : "bg-blue-600 text-white"
+          }`}
+          onClick={() => setListView(false)}
+        >
+          <FontAwesomeIcon icon={faCalendar} className="mr-2" />
+          Calendar View
+        </button>
+        <button
+          className={` py-2 px-3 rounded-r-lg ${
+            !listView ? "bg-gray-100" : "bg-blue-600 text-white"
+          }`}
+          onClick={() => setListView(true)}
+        >
+          <FontAwesomeIcon icon={faList} className="mr-2" />
+          List View
+        </button>
       </div>
 
-      {appointments && (
+      {appointments && !listView && (
         <CalendarView
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
@@ -258,6 +272,12 @@ export default function ScheduleComponent() {
           hourlyTimes={hourlyTimes}
           appointments={appointments}
           calculateRowPosition={calculateRowPosition}
+          openDetailModal={openDetailModal}
+        />
+      )}
+      {appointments && listView && (
+        <ListView
+          appointments={appointments}
           openDetailModal={openDetailModal}
         />
       )}
