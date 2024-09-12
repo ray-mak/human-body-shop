@@ -17,11 +17,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faChevronLeft,
   faChevronRight,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons"
+import deleteAppointment from "@/app/actions/appointments/deleteAppointment"
+import { redirect } from "next/navigation"
+import CalendarView from "./CalendarView"
 
 export default function ScheduleComponent() {
   const [appointments, setAppointments] = useState<AppointmentData[]>()
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [detailModal, setDetailModal] = useState<boolean>(false)
+  const [selectedAppointment, setSelectedAppointment] =
+    useState<AppointmentData>()
+  const [listView, setListView] = useState<boolean>(false)
+  const [deleteModal, setDeleteModal] = useState<boolean>(false)
+  const [success, setSuccess] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (success) {
+      redirect("/admin/myschedule")
+    }
+  }, [success])
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -40,15 +56,54 @@ export default function ScheduleComponent() {
     fetchAppointments()
   }, [])
 
-  const tileClassName = ({ date }: { date: Date }) => {
-    if (
-      selectedDate &&
-      date.getDate() === selectedDate.getDate() &&
-      date.getMonth() === selectedDate.getMonth()
-    ) {
-      return "selected-date"
+  useEffect(() => {
+    if (detailModal) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
     }
-    return ""
+
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [detailModal])
+
+  function openDetailModal(id: string) {
+    const appointment = appointments?.find(
+      (appointment) => appointment.id === id
+    )
+    if (appointment) {
+      setSelectedAppointment(appointment)
+      setDetailModal(true)
+    }
+  }
+
+  function closeDetailModal() {
+    setDetailModal(false)
+    setSelectedAppointment(undefined)
+  }
+
+  function openDeleteModal() {
+    setDeleteModal(true)
+  }
+
+  function confirmDeleteAppointment() {
+    const cancelAppointment = async (id: string) => {
+      try {
+        const response = await deleteAppointment(id)
+        if (response.error) {
+          console.error(response.error)
+        } else if (response.message) {
+          console.log(response.message)
+          setSuccess(true)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    if (selectedAppointment) {
+      cancelAppointment(selectedAppointment.id)
+    }
   }
 
   const getDaysOfWeek = () => {
@@ -90,115 +145,122 @@ export default function ScheduleComponent() {
 
   console.log(appointments, selectedDate)
   return (
-    <div className="w-full p-2 lg:p-6 flex flex-col lg:flex-row">
-      <div className="w-full lg:w-[280px] hidden lg:block">
-        <Calendar
-          view="month"
-          calendarType="gregory"
-          tileClassName={tileClassName}
-          onClickDay={(date) => setSelectedDate(date)}
-        />
-      </div>
-      <div>
-        <div className="flex justify-between items-center mb-4 lg:hidden">
-          <button onClick={() => navigateWeek("prev")} className="px-4 py-2">
-            <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
-            Previous Week
-          </button>
-          <h1 className="text-2xl font-medium">
-            {format(daysOfWeek[0], "MMMM yyyy")}
-          </h1>
-          <button onClick={() => navigateWeek("next")} className="px-4 py-2">
-            Next Week
-            <FontAwesomeIcon icon={faChevronRight} className="ml-2" />
-          </button>
-        </div>
-      </div>
-      <div className="w-full overflow-x-auto">
-        <div className="grid min-w-[640px] ">
-          <div className="grid grid-cols-8">
-            <div className="empty-cell"></div>
-            {daysOfWeek.map((day, index) => (
-              <div
-                key={index}
-                className="text-center py-2 border-l border-gray-300 border-b sticky top-0"
-              >
-                <span className="block font-medium">{format(day, "EEE")}</span>{" "}
-                <span className="block text-sm text-gray-600">
-                  {format(day, "MMM d")}
-                </span>{" "}
+    <div className="w-full flex flex-col">
+      {selectedAppointment && detailModal && (
+        <div>
+          <div className="absolute left-0 top-0 w-full bg-black h-full z-10 opacity-80"></div>
+          <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center p-4">
+            {deleteModal ? (
+              <div className="flex flex-col bg-white p-6 rounded-lg z-20">
+                <div className="flex justify-between items-center mb-4">
+                  <h1 className="text-xl font-medium">Delete Appointment</h1>
+                  <button
+                    onClick={() => setDeleteModal(false)}
+                    className="ml-20"
+                    aria-label="hide delete appointment modal"
+                  >
+                    <FontAwesomeIcon icon={faTimes} />
+                  </button>
+                </div>
+                <p className="text-gray-600">
+                  Are you sure you want to delete this appointment?
+                </p>
+                <div className="flex gap-4 mt-6 ml-auto">
+                  <button
+                    className="text-gray-600 border-2 border-gray-500 px-4 py-2 rounded-lg hover:bg-gray-100"
+                    onClick={() => setDeleteModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                    onClick={confirmDeleteAppointment}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-8 overflow-y-auto max-h-[75vh] relative scrollbar-hide">
-            <div className="grid grid-rows-24 grid-cols-2 sticky left-0">
-              {hourlyTimes.map((time, index) => (
-                <div
-                  key={index}
-                  className="text-right h-12 border-gray-300 text-xs col-span-2 grid grid-cols-4"
-                >
-                  <div className="col-span-3 relative">
-                    <p className="absolute -top-2 right-1">
-                      {index !== 0 ? time : ""}
+            ) : (
+              <div className="bg-white p-6 rounded-lg z-20">
+                <div className="flex justify-between items-center mb-4">
+                  <h1 className="text-xl font-medium">Appointment Details</h1>
+                  <button
+                    onClick={() => closeDetailModal()}
+                    className="ml-20"
+                    aria-label="hide appointment details"
+                  >
+                    <FontAwesomeIcon icon={faTimes} />
+                  </button>
+                </div>
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <p className="text-lg font-medium">
+                      {selectedAppointment.serviceType}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {format(selectedAppointment.date, "EE, MMMM d")}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {format(
+                        parse(
+                          selectedAppointment.startTime,
+                          "HH:mm",
+                          new Date()
+                        ),
+                        "h:mm a"
+                      )}{" "}
+                      -{" "}
+                      {format(
+                        parse(selectedAppointment.endTime, "HH:mm", new Date()),
+                        "h:mm a"
+                      )}
                     </p>
                   </div>
-                  <div className="border-t border-gray-300"></div>
+                  <div>
+                    <p className="text-lg font-medium">Client Details</p>
+                    <p className="text-sm text-gray-600">
+                      {selectedAppointment.user.name}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {selectedAppointment.user.email}
+                    </p>
+                  </div>
+                  {selectedAppointment.userNote !== "" && (
+                    <div>
+                      <p className="text-lg font-medium">Client Notes</p>
+                      <p className="text-sm text-gray-600">
+                        {selectedAppointment.userNote}
+                      </p>
+                    </div>
+                  )}
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg mt-4"
+                    onClick={openDeleteModal}
+                  >
+                    Delete Appointment
+                  </button>
                 </div>
-              ))}
-            </div>
-
-            {daysOfWeek.map((day, index) => (
-              <div key={index} className="relative grid grid-rows-24">
-                {hourlyTimes.map((time, index) => (
-                  <div
-                    key={index}
-                    className="border-l border-t border-gray-300 h-12 text-xs"
-                  ></div>
-                ))}
-                {appointments &&
-                  appointments
-                    .filter(
-                      (appointment) =>
-                        format(new Date(appointment.date), "EEE MMM d yyyy") ===
-                        format(day, "EEE MMM d yyyy")
-                    )
-                    .map((appointment, index) => {
-                      const { rowStart, rowSpan } = calculateRowPosition(
-                        appointment.startTime,
-                        appointment.endTime
-                      )
-
-                      return (
-                        <div
-                          key={index}
-                          className="absolute w-full bg-blue-500 text-white text-xs p-1 rounded-lg border border-blue-800"
-                          style={{
-                            top: `${rowStart * 3}rem`,
-                            height: `${rowSpan * 3}rem`,
-                          }}
-                        >
-                          <p className="whitespace-nowrap overflow-hidden text-ellipses">
-                            {appointment.serviceType}
-                          </p>
-                          <p className="whitespace-nowrap overflow-hidden text-ellipses">
-                            {format(
-                              parse(appointment.startTime, "HH:mm", new Date()),
-                              "h a"
-                            )}{" "}
-                            -
-                            {format(
-                              parse(appointment.endTime, "HH:mm", new Date()),
-                              "h a"
-                            )}
-                          </p>
-                        </div>
-                      )
-                    })}
               </div>
-            ))}
+            )}
           </div>
         </div>
+      )}
+      <div>
+        <button>List View</button>
       </div>
+
+      {appointments && (
+        <CalendarView
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          navigateWeek={navigateWeek}
+          daysOfWeek={daysOfWeek}
+          hourlyTimes={hourlyTimes}
+          appointments={appointments}
+          calculateRowPosition={calculateRowPosition}
+          openDetailModal={openDetailModal}
+        />
+      )}
     </div>
   )
 }

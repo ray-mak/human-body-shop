@@ -11,6 +11,7 @@ export type AppointmentData = {
   serviceType: string
   staffId: string
   startTime: string
+  userNote: string
   user: {
     id: string
     clerkUserId: string
@@ -42,6 +43,7 @@ export default async function getAppointments(): Promise<{
         serviceType: true,
         staffId: true,
         startTime: true,
+        userNote: true,
         user: {
           select: {
             id: true,
