@@ -145,8 +145,8 @@ export default function ScheduleComponent() {
     <div className="w-full flex flex-col items-center">
       {selectedAppointment && detailModal && (
         <div>
-          <div className="absolute left-0 top-0 w-full bg-black h-full z-10 opacity-80"></div>
-          <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center p-4">
+          <div className="fixed left-0 top-0 w-full h-full bg-black h-full z-10 opacity-80"></div>
+          <div className="fixed left-0 top-0 w-full h-full z-20 flex items-center justify-center p-4">
             {deleteModal ? (
               <div className="flex flex-col bg-white p-6 rounded-lg z-20">
                 <div className="flex justify-between items-center mb-4">

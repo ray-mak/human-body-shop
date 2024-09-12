@@ -212,9 +212,9 @@ export default function SpecialHoursList() {
       <div className="border p-4 sm:p-6 rounded-lg">
         {editModal && dateToEdit && (
           <div>
-            <div className="absolute left-0 top-0 w-full bg-white h-full z-10 opacity-80"></div>
-            <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
-              <div className="p-8 bg-white flex flex-col gap-8 items-center justify-center bg-white z-20 border rounded-lg shadow-xl">
+            <div className="fixed left-0 top-0 w-full h-full bg-white h-full z-10 opacity-80"></div>
+            <div className="fixed left-0 top-0 w-full h-full flex items-center  z-20  justify-center">
+              <div className="p-8 bg-white flex flex-col gap-8 items-center justify-center bg-whiteborder rounded-lg shadow-xl">
                 <p>
                   Update availability for{" "}
                   <span className="font-semibold">

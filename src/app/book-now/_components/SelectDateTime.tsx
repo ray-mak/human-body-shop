@@ -12,6 +12,7 @@ type AvailabilityProp = {
   chooseDate: (date: Date) => void
   chooseTime: (time: Date) => void
   specialistAppointments: Appointment[] | undefined
+  totalDuration: number | undefined
 }
 
 interface DateType {
@@ -30,6 +31,7 @@ export default function SelectDateTime({
   chooseDate,
   chooseTime,
   specialistAppointments,
+  totalDuration,
 }: AvailabilityProp) {
   console.log(availabilities)
   const tileDisabled = ({ date, view }: DisabledTileProps) => {
@@ -72,7 +74,7 @@ export default function SelectDateTime({
     return false
   }
 
-  console.log(selectedDate)
+  console.log(specialistAppointments)
 
   const tileClassName = ({ date }: { date: Date }) => {
     if (
@@ -119,6 +121,8 @@ export default function SelectDateTime({
           i <= endTime;
           i = add(i, { minutes: interval })
         ) {
+          const serviceEndTime = add(i, { minutes: totalDuration })
+
           if ((!isToday || i > today) && appointmentsForDate) {
             const isSlotAvailable = !appointmentsForDate.some((appointment) => {
               const appointmentStartTime = set(justDate, {
@@ -129,7 +133,11 @@ export default function SelectDateTime({
                 hours: parseInt(appointment.endTime.split(":")[0], 10),
                 minutes: parseInt(appointment.endTime.split(":")[1], 10),
               })
-              return i >= appointmentStartTime && i < appointmentEndTime
+              return (
+                (i >= appointmentStartTime && i < appointmentEndTime) ||
+                (i < appointmentStartTime &&
+                  serviceEndTime > appointmentStartTime)
+              )
             })
 
             if (isSlotAvailable) {
@@ -158,6 +166,8 @@ export default function SelectDateTime({
       })
 
       for (let i = startTime; i <= endTime; i = add(i, { minutes: interval })) {
+        const serviceEndTime = add(i, { minutes: totalDuration })
+
         if ((!isToday || i > today) && appointmentsForDate) {
           const isSlotAvailable = !appointmentsForDate.some((appointment) => {
             const appointmentStartTime = set(justDate, {
@@ -168,7 +178,11 @@ export default function SelectDateTime({
               hours: parseInt(appointment.endTime.split(":")[0], 10),
               minutes: parseInt(appointment.endTime.split(":")[1], 10),
             })
-            return i >= appointmentStartTime && i < appointmentEndTime
+            return (
+              (i >= appointmentStartTime && i < appointmentEndTime) ||
+              (i < appointmentStartTime &&
+                serviceEndTime > appointmentStartTime)
+            )
           })
 
           if (isSlotAvailable) {
@@ -178,15 +192,6 @@ export default function SelectDateTime({
       }
     })
     return times
-
-    // const times = []
-    // for (let i = beginning; i <= end; i = add(i, { minutes: interval })) {
-    //   if (!isToday || i > today) {
-    //     times.push(i)
-    //   }
-    // }
-
-    // return times
   }
 
   const categorizeTimes = (times: Date[]) => {

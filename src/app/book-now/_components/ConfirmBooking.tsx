@@ -199,9 +199,9 @@ export default function ConfirmBooking({
       </div>
       {success && (
         <div>
-          <div className="absolute left-0 top-0 w-full bg-black h-full z-10 opacity-80"></div>
-          <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
-            <div className="relative m-6 p-6 md:p-12 bg-white flex flex-col gap-8 items-center justify-center bg-white z-20 border rounded-lg">
+          <div className="fixed left-0 top-0 w-full h-full bg-black h-full z-10 opacity-80"></div>
+          <div className="fixed left-0 top-0 w-full h-full flex items-center justify-center z-20 ">
+            <div className="relative m-6 p-6 md:p-12 bg-white flex flex-col gap-8 items-center justify-center bg-white border rounded-lg">
               <Link
                 href="/dashboard"
                 className="absolute top-0 right-0 m-4"

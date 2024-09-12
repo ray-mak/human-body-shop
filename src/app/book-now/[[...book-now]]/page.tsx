@@ -321,7 +321,7 @@ export default function BookNowPage() {
     }
   }
 
-  console.log(specialistAppointments)
+  console.log(specialistAppointments, selectedService)
 
   return (
     <div className="flex">
@@ -357,6 +357,7 @@ export default function BookNowPage() {
               chooseDate={chooseDate}
               chooseTime={chooseTime}
               specialistAppointments={specialistAppointments}
+              totalDuration={selectedService?.totalDuration}
             />
           )}
           {step === 2 && !isSignedIn && (

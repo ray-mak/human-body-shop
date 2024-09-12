@@ -143,8 +143,8 @@ export default function UserDashboard() {
     <div>
       {appointmentToCancel && (
         <div>
-          <div className="absolute left-0 top-0 w-full bg-black h-full z-10 opacity-80"></div>
-          <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
+          <div className="fixed left-0 top-0 w-full h-full bg-black h-full z-10 opacity-80"></div>
+          <div className="fixed left-0 top-0 w-full h-full z-20 flex items-center justify-center">
             <div className="relative m-6 p-6 md:p-12 bg-white flex flex-col gap-8 items-center justify-center bg-white z-20 border rounded-lg">
               <h2 className="text-2xl font-semibold">Cancel Appointment</h2>
               <p className="text-gray-600">
@@ -173,23 +173,25 @@ export default function UserDashboard() {
       <div>
         <div>
           <h2 className="text-2xl font-semibold mb-4">Appointments</h2>
-          <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-lg">
-            <Image
-              src="/images/calendaricon.png"
-              width={250}
-              height={250}
-              alt="icon of a calendar"
-            />
-            <p className="text-gray-600 text-center mt-4">
-              You have no upcoming appointments scheduled. Click the button
-              below to schedule an appointment!
-            </p>
-            <Link href="/book-now">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-6">
-                Book Now
-              </button>
-            </Link>
-          </div>
+          {!userData.appointments && (
+            <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-lg">
+              <Image
+                src="/images/calendaricon.png"
+                width={250}
+                height={250}
+                alt="icon of a calendar"
+              />
+              <p className="text-gray-600 text-center mt-4">
+                You have no upcoming appointments scheduled. Click the button
+                below to schedule an appointment!
+              </p>
+              <Link href="/book-now">
+                <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-6">
+                  Book Now
+                </button>
+              </Link>
+            </div>
+          )}
           <div>
             {upcomingAppointments.length > 0 && (
               <div className="flex flex-col gap-4">

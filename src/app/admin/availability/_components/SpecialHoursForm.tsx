@@ -179,9 +179,9 @@ export default function SpecialHoursForm() {
     <div className="flex flex-col items-center p-4 gap-4">
       {timeModal && (
         <div>
-          <div className="absolute left-0 top-0 w-full bg-white h-full z-10 opacity-80"></div>
-          <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
-            <div className="p-8 bg-white flex flex-col gap-8 items-center justify-center bg-white z-20 border rounded-lg shadow-xl">
+          <div className="fixed left-0 top-0 w-full h-full bg-white h-full z-10 opacity-80"></div>
+          <div className="fixed left-0 top-0 w-full h-full flex items-center  z-20 justify-center">
+            <div className="p-8 bg-white flex flex-col gap-8 items-center justify-center bg-white border rounded-lg shadow-xl">
               <div className="w-full">
                 <p>What hours are you available?</p>
                 <p className="text-left mt-2 font-semibold">
