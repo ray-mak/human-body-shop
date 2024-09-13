@@ -1,10 +1,14 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Poppins } from "next/font/google"
 import "./globals.css"
 import { Navbar } from "@/components/Navbar"
 import { ClerkProvider } from "@clerk/nextjs"
+import { Providers } from "@/providers"
 
-const inter = Inter({ subsets: ["latin"] })
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,10 +22,12 @@ export default async function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <Navbar />
-          <main>{children}</main>
+      <html lang="en" suppressHydrationWarning>
+        <body className={`transition-colors duration-300 ${poppins.className}`}>
+          <Providers>
+            <Navbar />
+            <main>{children}</main>
+          </Providers>
         </body>
       </html>
     </ClerkProvider>

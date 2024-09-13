@@ -40,6 +40,22 @@ input::-webkit-inner-spin-button {
   transition: 0.3s;
 }
 
+.theme-button {
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background-color: rgb(71 85 105);
+  left: -0.25rem;
+  top: -0.25rem;
+  transition: transform 0.4s ease;
+}
+
+.theme-button.darkmode {
+  background-color: white;
+  transform: translateX(1rem);
+}
+
 @media (max-width: 768px) {
   .navbar {
     position: fixed;
@@ -52,14 +68,13 @@ input::-webkit-inner-spin-button {
     align-items: start;
     width: 80%;
     height: 100vh;
-    border: 1px solid black;
     top: 0;
     right: -100%;
     z-index: 3;
-    background-color: #e3ddcd;
     padding: 80px;
     gap: 2em;
     transition: 0.3s ease-in-out;
+    box-shadow: -10px 0px 10px -15px rgba(0, 0, 0, 0.5);
   }
 
   .navmenu.opened {
@@ -70,7 +85,7 @@ input::-webkit-inner-spin-button {
     position: fixed;
     display: block;
     z-index: 4;
-    top: 20px;
+    top: 26px;
     right: 32px;
   }
 

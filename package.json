@@ -20,6 +20,7 @@
     "libphonenumber-js": "^1.11.7",
     "msgpack5": "^6.0.2",
     "next": "14.2.6",
+    "next-themes": "^0.3.0",
     "react": "^18",
     "react-calendar": "^5.0.0",
     "react-dom": "^18",
