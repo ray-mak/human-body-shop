@@ -50,6 +50,7 @@ model Staff {
   availabilities Availability[] @relation("RegularAvailability")
   specialAvailabilities SpecialAvailability[] @relation("SpecialAvailability")
   extendedTimeOff ExtendedTimeOff[] @relation("ExtendedTimeOff")
+  staffPreferences StaffPreferences? @relation("StaffPreferences")
 }
 
 model Availability {
@@ -79,7 +80,7 @@ model ExtendedTimeOff {
   startDate DateTime
   endDate   DateTime
   staffId String
-  staff Staff @relation("ExtendedTimeOff", fields: [staffId], references: [clerkStaffId])
+  staff Staff @relation("ExtendedTimeOff", fields: [staffId], references: [clerkStaffId], onDelete: Cascade)
   @@index([staffId], name: "extendedTimeOff_staffId")
 }
 
@@ -92,4 +93,12 @@ model ServiceType {
   price     Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model StaffPreferences {
+  id       String   @id @default(cuid())
+  interval Int @default(30)
+  maxDays Int @default(7)
+  staffId String @unique
+  staff Staff @relation("StaffPreferences", fields: [staffId], references: [clerkStaffId], onDelete: Cascade)
 }

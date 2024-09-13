@@ -6,7 +6,7 @@ import getServices from "../../actions/service/getServices"
 import SelectService from "../_components/SelectService"
 import getAllAvailabilities from "../../actions/availabilities/getAllAvailabilities"
 import SelectDateTime from "../_components/SelectDateTime"
-import "../../../components/Calendar.css"
+import "../../../styles/BookingCalendar.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import { SignIn, useAuth } from "@clerk/nextjs"
@@ -214,7 +214,6 @@ export default function BookNowPage() {
   }, [selectedService])
 
   useEffect(() => {
-    //find the specialist object in specialistList with the same clerkStaffId as selectedSpecialist. Then set the appointments of that specialist to specialistAppointments
     if (selectedSpecialist) {
       const specialist = specialistList.find(
         (specialist) => specialist.clerkStaffId === selectedSpecialist
@@ -358,6 +357,7 @@ export default function BookNowPage() {
               chooseTime={chooseTime}
               specialistAppointments={specialistAppointments}
               totalDuration={selectedService?.totalDuration}
+              selectedSpecialist={selectedSpecialist ? selectedSpecialist : ""}
             />
           )}
           {step === 2 && !isSignedIn && (

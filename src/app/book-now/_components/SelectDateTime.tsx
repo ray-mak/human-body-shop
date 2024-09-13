@@ -2,9 +2,11 @@
 
 import Calendar from "react-calendar"
 import { Availability } from "../[[...book-now]]/page"
-import { useState } from "react"
-import { add, format, isSameDay, set } from "date-fns"
+import { useEffect, useState } from "react"
+import { add, addDays, format, isSameDay, set } from "date-fns"
 import { Appointment } from "@/app/actions/service/getSpecialist"
+import { PreferenceData } from "@/app/actions/availabilities/updatePreferences"
+import getPreferences from "@/app/actions/availabilities/getPreferences"
 
 type AvailabilityProp = {
   availabilities: Availability
@@ -13,6 +15,7 @@ type AvailabilityProp = {
   chooseTime: (time: Date) => void
   specialistAppointments: Appointment[] | undefined
   totalDuration: number | undefined
+  selectedSpecialist: string
 }
 
 interface DateType {
@@ -32,8 +35,25 @@ export default function SelectDateTime({
   chooseTime,
   specialistAppointments,
   totalDuration,
+  selectedSpecialist,
 }: AvailabilityProp) {
-  console.log(availabilities)
+  const [preferences, setPreferences] = useState<PreferenceData>()
+  useEffect(() => {
+    const fetchPreferences = async (id: string) => {
+      try {
+        const response = await getPreferences(id)
+        if (response.error) {
+          console.error(response.error)
+        } else if (response.staffPreference) {
+          setPreferences(response.staffPreference)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchPreferences(selectedSpecialist)
+  }, [selectedSpecialist])
   const tileDisabled = ({ date, view }: DisabledTileProps) => {
     if (view === "month") {
       if (!availabilities) return false
@@ -91,7 +111,7 @@ export default function SelectDateTime({
     if (!selectedDate.justDate) return
 
     const { justDate } = selectedDate
-    const interval = 30
+    const interval = preferences?.interval
     const today = new Date()
     const isToday = isSameDay(today, justDate)
 
@@ -283,6 +303,7 @@ export default function SelectDateTime({
       <div className="flex flex-col items-center w-full">
         <Calendar
           minDate={new Date()}
+          maxDate={addDays(new Date(), preferences?.maxDays || 14)}
           view="month"
           calendarType="gregory"
           tileClassName={tileClassName}
