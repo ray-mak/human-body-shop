@@ -100,74 +100,16 @@ const ReviewsSection = () => {
         <h2 className="text-4xl font-medium">What People Are Saying</h2>
         <div className="w-20 h-[2px] bg-mutedTeal"></div>
       </div>
-      {/* <div className="w-full md:w-5/6 lg:w-3/4 lg:max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-10 p-4 lg:p-0">
-        <div className="relative flex flex-col items-center gap-4 border rounded-lg shadow-lg p-8">
-          <div className="absolute left-3 top-3 opacity-40">
-            <FontAwesomeIcon
-              icon={faQuoteLeft}
-              className="text-4xl text-mutedTeal dark:text-darkTeal"
-            />
-          </div>
-          <div className="absolute right-3 top-3 opacity-40">
-            <FontAwesomeIcon
-              icon={faQuoteRight}
-              className="text-4xl text-mutedTeal dark:text-darkTeal"
-            />
-          </div>
-          <p className="text-center text-gray-600 text-sm dark:text-gray-200">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatem, quos, quas dolorum, voluptatibus quidem.
-          </p>
-          <div className="flex gap-1">
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-          </div>
-          <p className="text-xl font-semibold text-gray-600 dark:text-gray-200">
-            John Doe
-          </p>
-        </div>
-        <div className="relative flex flex-col items-center gap-4 border rounded-lg shadow-lg p-8">
-          <div className="absolute left-3 top-3 opacity-40">
-            <FontAwesomeIcon
-              icon={faQuoteLeft}
-              className="text-4xl text-mutedTeal dark:text-darkTeal"
-            />
-          </div>
-          <div className="absolute right-3 top-3 opacity-40">
-            <FontAwesomeIcon
-              icon={faQuoteRight}
-              className="text-4xl text-mutedTeal dark:text-darkTeal"
-            />
-          </div>
-          <p className="text-center text-gray-600 text-sm dark:text-gray-200">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatem, quos, quas dolorum, voluptatibus quidem.
-          </p>
-          <div className="flex gap-1">
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-          </div>
-          <p className="text-xl font-semibold text-gray-600 dark:text-gray-200">
-            John Doe
-          </p>
-        </div>
-      </div> */}
       <div className="relative w-full md:w-5/6 lg:w-3/4 lg:max-w-6xl px-24 md:px-0">
         <button
-          className="absolute top-1/2 left-8 md:-left-20"
+          className="absolute top-1/2 left-8 md:-left-12 lg:-left-20"
           onClick={prevSlide}
           aria-label="see previous slide of reviews"
         >
           <FontAwesomeIcon icon={faArrowLeftLong} size="xl" />
         </button>
         <button
-          className="absolute top-1/2 right-8 md:-right-20"
+          className="absolute top-1/2 right-8 md:-right-12 lg:-right-20"
           onClick={nextSlide}
           aria-label="see next slide of reviews"
         >

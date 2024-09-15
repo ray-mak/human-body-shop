@@ -23,7 +23,9 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`transition-colors duration-300 ${poppins.className}`}>
+        <body
+          className={`min-h-screen transition-colors duration-300 ${poppins.className}`}
+        >
           <Providers>
             <Navbar />
             <main>{children}</main>
