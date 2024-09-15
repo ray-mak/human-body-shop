@@ -83,6 +83,12 @@ input::-webkit-inner-spin-button {
   line-height: 1.2;
 }
 
+.image-section {
+  background-image: url("/images/candle.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 @media (max-width: 768px) {
   .hero-section {
     height: 100%;

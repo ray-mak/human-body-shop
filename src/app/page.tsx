@@ -1,5 +1,8 @@
 import FeaturesSection from "@/components/FeaturesSection"
 import FeaturesSection2 from "@/components/FeaturesSection2"
+import FeaturesSection3 from "@/components/FeaturesSection3"
+import ReviewsSection from "@/components/ReviewsSection"
+import SectionImageBG from "@/components/SectionImageBG"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -39,6 +42,9 @@ export default function Home() {
         </div>
         <FeaturesSection />
         <FeaturesSection2 />
+        <FeaturesSection3 />
+        <SectionImageBG />
+        <ReviewsSection />
       </div>
     </div>
   )

@@ -4,7 +4,7 @@ import Link from "next/link"
 const FeaturesSection2 = () => {
   return (
     <div className="flex items-center justify-center bg-sky-50 dark:bg-darkIndigo relative">
-      <div className="w-full md:w-5/6 lg:w-3/4 lg:max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-10 p-4 md:p-0">
+      <div className="w-full md:w-5/6 lg:w-3/4 lg:max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-10 p-4 py-8 lg:p-0">
         <div className="relative lg:-ml-[16rem] 2xl:-ml-[24rem] lg:w-[calc(100%+16rem)] 2xl:w-[calc(100%+20rem)]">
           <Image
             src="/images/benefitimg.webp"
