@@ -55,7 +55,7 @@ const aboutPage = () => {
           </div>
           <div className="w-full flex items-center justify-center py-12 bg-mutedTeal dark:bg-darkTeal">
             <p className="text-white text-2xl font-semibold">
-              Motivational quote like It's time to be pain free or something
+              Motivational quote like Its time to be pain free or something
             </p>
           </div>
           <div className="w-full flex flex-col items-center gap-6 md:w-5/6 lg:w-3/4 lg:max-w-6xl p-4 md:p-0 my-16">
