@@ -1,4 +1,4 @@
-import ScheduleComponent from "./_components/ScheduleComponent"
+import ScheduleComponent from "../_components/ScheduleComponent"
 
 export default function AdminSchedulePage() {
   return (

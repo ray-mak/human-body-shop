@@ -4,7 +4,7 @@ import getAppointments, {
   AppointmentData,
 } from "@/app/actions/appointments/getAppointments"
 import { useEffect, useState } from "react"
-import "../../../../styles/AdminScheduleCalendar.css"
+import "../../../styles/AdminScheduleCalendar.css"
 import {
   addDays,
   differenceInMinutes,
@@ -110,7 +110,7 @@ export default function ScheduleComponent() {
 
   const getHourlyTimes = () => {
     const times = []
-    for (let hour = 0; hour < 24; hour++) {
+    for (let hour = 8; hour < 20; hour++) {
       const timeString = format(new Date().setHours(hour, 0, 0), "h a")
       times.push(timeString)
     }
@@ -123,8 +123,10 @@ export default function ScheduleComponent() {
   const calculateRowPosition = (startTime: string, endTime: string) => {
     const startHour = parseInt(startTime.split(":")[0], 10)
     const startMinutes = parseInt(startTime.split(":")[1], 10)
+    //24 hour time
+    // const rowStart = startHour + startMinutes / 60
 
-    const rowStart = startHour + startMinutes / 60
+    const rowStart = startHour - 8 + startMinutes / 60
     const rowSpan =
       differenceInMinutes(
         new Date(`1970-01-01T${endTime}:00`),

@@ -1,7 +1,7 @@
 import { checkRole } from "@/utils/roles"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import ScheduleComponent from "./myschedule/_components/ScheduleComponent"
+import ScheduleComponent from "./_components/ScheduleComponent"
 
 export default function AdminDashboard() {
   if (!checkRole("admin")) {
