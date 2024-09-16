@@ -248,7 +248,7 @@ export default function ScheduleComponent() {
         <button
           className={` py-2 px-3 rounded-l-lg ${
             listView
-              ? "bg-gray-100 bg-gray-600"
+              ? "bg-gray-100 dark:bg-gray-600"
               : "bg-blue-600 dark:bg-indigo-800 text-white"
           }`}
           onClick={() => setListView(false)}

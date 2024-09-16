@@ -1,10 +1,17 @@
 "use client"
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
+import { auth } from "@clerk/nextjs/server"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
 
-export default function HamburgerMenu() {
+export default function HamburgerMenu({
+  isAdmin,
+  userId,
+}: {
+  isAdmin: boolean | undefined
+  userId: string | null
+}) {
   const pathname = usePathname()
   const [hamburgerMenu, setHamburgerMenu] = useState(false)
   function toggleHamburger() {
@@ -30,15 +37,39 @@ export default function HamburgerMenu() {
           hamburgerMenu ? "opened" : ""
         } `}
       >
-        <Link
-          href="/"
-          className={` font-semibold text-darkIndigo dark:text-lightGray transition-colors duration-300 ${
-            pathname === "/" ? "underline" : ""
-          }`}
-          onClick={closeHamburger}
-        >
-          Home
-        </Link>
+        {isAdmin && (
+          <Link
+            href="/admin"
+            className={` font-semibold text-darkIndigo dark:text-lightGray transition-colors duration-300 ${
+              pathname === "/admin" ? "underline" : ""
+            }`}
+            onClick={closeHamburger}
+          >
+            Admin
+          </Link>
+        )}
+        {!isAdmin && userId && (
+          <Link
+            href="/dashboard"
+            className={` font-semibold text-darkIndigo dark:text-lightGray transition-colors duration-300 ${
+              pathname === "/dashboard" ? "underline" : ""
+            }`}
+            onClick={closeHamburger}
+          >
+            My Appointments
+          </Link>
+        )}
+        {!userId && (
+          <Link
+            href="/"
+            className={` font-semibold text-darkIndigo dark:text-lightGray transition-colors duration-300 ${
+              pathname === "/" ? "underline" : ""
+            }`}
+            onClick={closeHamburger}
+          >
+            Home
+          </Link>
+        )}
         <Link
           href="/about"
           className={` font-semibold text-darkIndigo dark:text-lightGray transition-colors duration-300  ${
@@ -67,12 +98,14 @@ export default function HamburgerMenu() {
         <SignedIn>
           <UserButton />
         </SignedIn>
-        <Link
-          href="/book-now"
-          className="px-4 py-1 rounded-lg bg-mutedTeal dark:bg-darkTeal text-white hover:opacity-80 transition-colors duration-300"
-        >
-          Book an Appointment
-        </Link>
+        {!isAdmin && (
+          <Link
+            href="/book-now"
+            className="px-4 py-1 rounded-lg bg-mutedTeal dark:bg-darkTeal text-white hover:opacity-80 transition-colors duration-300"
+          >
+            Book an Appointment
+          </Link>
+        )}
       </div>
     </>
   )

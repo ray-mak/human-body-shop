@@ -2,9 +2,13 @@ import Link from "next/link"
 import HamburgerMenu from "./HamburgerMenu"
 import { checkUser } from "../lib/checkUser"
 import ThemeSwitch from "./ThemeSwitch"
+import { checkRole } from "@/utils/roles"
+import { auth } from "@clerk/nextjs/server"
 
 export async function Navbar() {
   const user = await checkUser()
+  const isAdmin = checkRole("admin")
+  const { userId } = auth()
 
   return (
     <nav className="navbar fixed z-20 flex w-full h-20 p-4 md:p-0 flex items-center justify-center bg-white dark:bg-deepGray shadow-xl">
@@ -12,7 +16,7 @@ export async function Navbar() {
         <Link href="/" className={`text-4xl font-bold `}>
           LOGO
         </Link>
-        <HamburgerMenu />
+        <HamburgerMenu isAdmin={isAdmin} userId={userId} />
         <ThemeSwitch />
       </div>
     </nav>
