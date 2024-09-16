@@ -160,6 +160,7 @@ export default async function createAppointment(
     totalDuration
   )
   const endTimeString = format(appointmentEndTimeTotal, "HH:mm")
+  const newNotes = notes || ""
   try {
     await db.appointment.create({
       data: {
@@ -169,7 +170,7 @@ export default async function createAppointment(
         endTime: endTimeString,
         clientDuration,
         totalDuration,
-        userNote: notes,
+        userNote: newNotes,
         staffId: "user_2lDYOChTXgLXkwMLfvgXUzlY0eC",
         userId,
       },
