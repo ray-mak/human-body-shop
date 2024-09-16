@@ -97,7 +97,9 @@ const ReviewsSection = () => {
     <div className="flex flex-col items-center justify-center py-16 gap-8">
       <div className="flex gap-4 items-center">
         <div className="w-20 h-[2px] bg-mutedTeal"></div>
-        <h2 className="text-4xl font-medium">What People Are Saying</h2>
+        <h2 className="text-4xl font-medium text-center">
+          What People Are Saying
+        </h2>
         <div className="w-20 h-[2px] bg-mutedTeal"></div>
       </div>
       <div className="relative w-full md:w-5/6 lg:w-3/4 lg:max-w-6xl px-24 md:px-0">

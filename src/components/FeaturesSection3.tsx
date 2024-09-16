@@ -5,7 +5,7 @@ const FeaturesSection3 = () => {
     <div className="flex flex-col items-center justify-center py-20 gap-8">
       <div className="flex gap-4 items-center">
         <div className="w-20 h-[2px] bg-mutedTeal"></div>
-        <h2 className="text-4xl font-medium">Our Process</h2>
+        <h2 className="text-4xl font-medium text-center">Our Process</h2>
         <div className="w-20 h-[2px] bg-mutedTeal"></div>
       </div>
       <p className="text-center text-gray-600 text-sm dark:text-gray-200">
