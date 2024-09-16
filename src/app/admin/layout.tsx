@@ -8,7 +8,7 @@ export default async function AdminLayout({
   return (
     <div>
       <AdminNav />
-      <div>{children}</div>
+      <div className="mt-32 mb-16">{children}</div>
     </div>
   )
 }

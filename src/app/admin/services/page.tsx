@@ -10,7 +10,7 @@ export default function ManageAvailibilityPage() {
   return (
     <div>
       <div className="flex flex-col gap-6 items-center p-4">
-        <div className="w-full max-w-4xl mt-20">
+        <div className="mt-4 w-full max-w-4xl">
           <div className="flex items-center">
             <h1 className="text-3xl font-semibold">Services</h1>
             <Link

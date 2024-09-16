@@ -1,6 +1,7 @@
 import { checkRole } from "@/utils/roles"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import ScheduleComponent from "./myschedule/_components/ScheduleComponent"
 
 export default function AdminDashboard() {
   if (!checkRole("admin")) {
@@ -8,17 +9,8 @@ export default function AdminDashboard() {
   }
   return (
     <div className="flex">
-      <div className="mt-20 w-full flex flex-col gap-4 items-center justify-center">
-        <h1>Dashboard</h1>
-        <Link href="/admin/availability" className="underline">
-          Manage Availability
-        </Link>
-        <Link href="/admin/preferences" className="underline">
-          Manage Preferences
-        </Link>
-        <Link href="/admin/services" className="underline">
-          Manage Services
-        </Link>
+      <div className="mt-4 w-full flex flex-col gap-4 items-center justify-center">
+        <ScheduleComponent />
       </div>
     </div>
   )

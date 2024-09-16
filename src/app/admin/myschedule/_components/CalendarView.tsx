@@ -85,18 +85,18 @@ export default function CalendarView({
             ))}
           </div>
           <div className="grid grid-cols-8 overflow-y-auto max-h-[75vh] relative scrollbar-hide">
-            <div className="grid grid-rows-24 grid-cols-2 sticky left-0">
+            <div className="grid grid-rows-24 grid-cols-3 sticky left-0">
               {hourlyTimes.map((time, index) => (
                 <div
                   key={index}
-                  className="text-right h-12 border-gray-300 text-xs col-span-2 grid grid-cols-4"
+                  className="text-right h-12 border-gray-300 text-xs col-span-3 grid grid-cols-4"
                 >
-                  <div className="col-span-3 relative">
+                  <div className="col-span-2 relative">
                     <p className="absolute -top-2 right-1">
                       {index !== 0 ? time : ""}
                     </p>
                   </div>
-                  <div className="border-t border-gray-300"></div>
+                  <div className="border-t col-span-2 border-gray-300"></div>
                 </div>
               ))}
             </div>

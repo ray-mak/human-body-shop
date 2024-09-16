@@ -5,6 +5,7 @@ import updatePreferences, {
   PreferenceData,
 } from "@/app/actions/availabilities/updatePreferences"
 import { useAuth } from "@clerk/nextjs"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -74,8 +75,11 @@ export default function PreferenceForm() {
   console.log(preferences)
   return (
     <div className="flex">
-      <div className="mt-20 w-full flex flex-col gap-4 items-center justify-center p-4">
+      <div className=" w-full flex flex-col gap-4 items-center justify-center p-4">
         <h1 className="text-2xl font-semibold">Manage Preferences</h1>
+        <Link href="/admin/availability" className="underline">
+          Back to Availability
+        </Link>
         <p className="text-gray-500 text-center">
           Set the time interval and maximum days on your availability calendar.
         </p>

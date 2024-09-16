@@ -76,18 +76,20 @@ export default function ServiceList() {
     return (
       <div
         key={object.id}
-        className="flex flex-col p-4 border rounded-md bg-gray-100"
+        className="flex flex-col p-4 border rounded-md bg-gray-100 dark:bg-gray-800"
       >
         <div className="flex">
           <p className="font-medium">{object.name}</p>
           <p className="ml-auto">${object.price}</p>
         </div>
-        <p className="text-gray-500">{object.clientDuration} Minutes</p>
+        <p className="text-gray-500 dark:text-gray-200">
+          {object.clientDuration} Minutes
+        </p>
         <p className="mt-4">{object.description}</p>
         <div className="mt-4 ml-auto">
           <Link
             href={`/admin/services/${object.id}`}
-            className="bg-white rounded-md px-4 py-2 border border-gray-300 hover:bg-gray-200"
+            className="bg-white dark:bg-gray-900 rounded-md px-4 py-2 border border-gray-300 hover:bg-gray-200"
           >
             Edit
           </Link>
@@ -130,12 +132,17 @@ export default function ServiceList() {
       )}
       <div className="flex items-center">
         <h1 className="py-4 font-bold text-lg">Service List</h1>
-        <Link href="/admin" className="back-button bg-white ml-auto">
+        <Link
+          href="/admin"
+          className="back-button bg-white dark:bg-inherit ml-auto"
+        >
           <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
           Go Back
         </Link>
       </div>
-      <div className="grid grid-cols-2 gap-6">{serviceCards}</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {serviceCards}
+      </div>
     </div>
   )
 }

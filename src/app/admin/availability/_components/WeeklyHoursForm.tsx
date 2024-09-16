@@ -67,7 +67,16 @@ export default function WeeklyHoursForm() {
             ])
             console.error("Error fetching availabilities")
           } else if (result.availabilities) {
-            setAvailibility(result.availabilities)
+            const updatedAvailibilities = result.availabilities.map((day) => {
+              const timesEmpty = day.availibility.every(
+                (time) => time.start === "" && time.end === ""
+              )
+              if (timesEmpty) {
+                return { ...day, availibility: [] }
+              }
+              return day
+            })
+            setAvailibility(updatedAvailibilities)
           }
         } catch (error) {
           console.error("Error fetching availabilities")
@@ -140,6 +149,7 @@ export default function WeeklyHoursForm() {
   ])
 
   useEffect(() => {
+    if (availibility.length === 0) return
     const overlaps = findOverlaps(availibility)
     if (overlaps.length > 0) {
       overlaps.forEach((overlap) => {
@@ -295,6 +305,7 @@ export default function WeeklyHoursForm() {
     setErrorMessage(errorMessages)
     setSuccess(false)
   }
+
   return (
     <div className="flex">
       {loading && (
@@ -308,7 +319,7 @@ export default function WeeklyHoursForm() {
           </div>
         </div>
       )}
-      <div className="mt-10 w-full flex items-center justify-center">
+      <div className="w-full flex items-center justify-center">
         <form className="flex flex-col gap-4 p-4 border mb-20">
           <h1 className="text-xl font-semibold text-center">
             Manage Availability

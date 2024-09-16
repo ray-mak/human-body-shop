@@ -245,7 +245,9 @@ export default function ScheduleComponent() {
       <div className="rounded-lg border-2 my-2">
         <button
           className={` py-2 px-3 rounded-l-lg ${
-            listView ? "bg-gray-100" : "bg-blue-600 text-white"
+            listView
+              ? "bg-gray-100 bg-gray-600"
+              : "bg-blue-600 dark:bg-indigo-800 text-white"
           }`}
           onClick={() => setListView(false)}
         >
@@ -254,7 +256,9 @@ export default function ScheduleComponent() {
         </button>
         <button
           className={` py-2 px-3 rounded-r-lg ${
-            !listView ? "bg-gray-100" : "bg-blue-600 text-white"
+            !listView
+              ? "bg-gray-100 dark:bg-gray-600"
+              : "bg-blue-600 dark:bg-indigo-800 text-white"
           }`}
           onClick={() => setListView(true)}
         >

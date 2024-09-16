@@ -4,6 +4,7 @@ import { useState } from "react"
 import WeeklyHoursForm from "./WeeklyHoursForm"
 import SpecialHoursForm from "./SpecialHoursForm"
 import SpecialHoursComponent from "./SpecialHoursComponent"
+import Link from "next/link"
 
 export default function AvailibilityComponent() {
   const [viewWeeklyHours, setViewWeeklyHours] = useState<boolean>(true)
@@ -15,7 +16,7 @@ export default function AvailibilityComponent() {
   }
   return (
     <div className="flex flex-col gap-6">
-      <div className=" mt-12 flex justify-center">
+      <div className="mt-6 md:mt-12 flex justify-center items-center">
         <div className="flex p-1 border rounded-lg bg-gray-200 dark:bg-gray-950">
           <button
             type="button"
@@ -39,6 +40,12 @@ export default function AvailibilityComponent() {
           </button>
         </div>
       </div>
+      <Link
+        href="/admin/availability/preferences"
+        className="text-center underline"
+      >
+        Manage Preferences
+      </Link>
       {viewWeeklyHours ? <WeeklyHoursForm /> : <SpecialHoursComponent />}
     </div>
   )
