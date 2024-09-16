@@ -59,7 +59,7 @@ const Footer = () => {
         <div className="absolute text-xs flex flex-col items-center top-[70%] md:top-1/3 right-0 md:right-0">
           Back to Top
           <div className="mt-4">
-            <Link href={"/#main"} className="p-2 bg-white rounded-lg">
+            <Link href={"#main"} className="p-2 bg-white rounded-lg">
               <FontAwesomeIcon
                 icon={faArrowUp}
                 size="lg"

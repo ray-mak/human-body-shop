@@ -18,11 +18,12 @@ export default function Home() {
           <div className="w-full md:w-5/6 lg:w-3/4 lg:max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-16 p-4 md:p-0 mt-6 md:mt-0">
             <div className="flex flex-col justify-center">
               <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold">
-                Come get a rub a dub dub a dub dub
+                Headline addressing the clients's needs and problems
               </h1>
               <p className="md:text-lg mt-8">
-                Get a life changing back rub today for yourself or your husband
-                or your wife or your kid or your dog
+                Subheadline that explains the services and benefits of the
+                service and how it can help the client. Lorem ipsum dolor sit
+                amet, consectetur adipiscing elit.
               </p>
               <div className="mt-12 self-start">
                 <Link
