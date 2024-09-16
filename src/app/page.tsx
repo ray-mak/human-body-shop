@@ -1,3 +1,4 @@
+import ContactForm from "@/components/ContactForm"
 import FeaturesSection from "@/components/FeaturesSection"
 import FeaturesSection2 from "@/components/FeaturesSection2"
 import FeaturesSection3 from "@/components/FeaturesSection3"
@@ -50,6 +51,12 @@ export default function Home() {
         <FeaturesSection3 />
         <SectionImageBG />
         <ReviewsSection />
+        <div className="mt-6 py-12 bg-gray-100 dark:bg-gray-800">
+          <h2 className="text-2xl font-semibold text-center mb-2">
+            Have a Question?
+          </h2>
+          <ContactForm />
+        </div>
         <Footer />
       </div>
     </div>
