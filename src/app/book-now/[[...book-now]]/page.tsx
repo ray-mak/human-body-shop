@@ -1,5 +1,4 @@
 "use client"
-//Need to handle success state and add loading
 
 import { useEffect, useState } from "react"
 import getServices from "../../actions/service/getServices"
@@ -21,6 +20,8 @@ import getSpecialist, {
   Appointment,
   Specialist,
 } from "@/app/actions/service/getSpecialist"
+import Footer from "@/components/Footer"
+import { FadeLoader } from "react-spinners"
 
 export type ServiceData = {
   id: string
@@ -107,6 +108,19 @@ export default function BookNowPage() {
   })
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (loading) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [loading])
 
   useEffect(() => {
     if (
@@ -134,29 +148,24 @@ export default function BookNowPage() {
       try {
         const response = await getServices()
         if (response.error) {
-          console.error(response.error)
         } else if (response.services) {
           setServices(response.services)
+          setLoading(false)
         }
-      } catch (error) {
-        console.error(error)
-      }
+      } catch (error) {}
     }
 
     const fetchSpecialists = async () => {
       try {
         const response = await getSpecialist()
         if (response.error) {
-          console.error(response.error)
         } else if (response.specialists) {
           setSpecialistList(response.specialists)
           if (response.specialists.length === 1) {
             setSelectedSpecialist(response.specialists[0].clerkStaffId)
           }
         }
-      } catch (error) {
-        console.error(error)
-      }
+      } catch (error) {}
     }
 
     fetchServices()
@@ -195,19 +204,18 @@ export default function BookNowPage() {
   }, [])
 
   useEffect(() => {
+    setLoading(true)
     const fetchAvailabilities = async () => {
       try {
         if (selectedSpecialist) {
           const response = await getAllAvailabilities(selectedSpecialist)
           if (response.error) {
-            console.error(response.error)
           } else if (response.data) {
             setAvailabilities(response.data)
+            setLoading(false)
           }
         }
-      } catch (error) {
-        console.error(error)
-      }
+      } catch (error) {}
     }
 
     fetchAvailabilities()
@@ -295,13 +303,13 @@ export default function BookNowPage() {
       selectedDate.dateTime &&
       confirmationData.phoneNumber !== ""
     ) {
+      setLoading(true)
       const addAppointment = async (data: AppointmentData) => {
         const { error, message } = await createAppointment(data)
         if (error) {
-          console.error(error)
           setError(error)
         } else if (message) {
-          console.log(message)
+          setLoading(false)
           setSuccess(true)
         }
       }
@@ -315,16 +323,22 @@ export default function BookNowPage() {
         clientDuration: selectedService.clientDuration,
         totalDuration: selectedService.totalDuration,
       }
-      console.log(appointmentData)
+
       addAppointment(appointmentData)
     }
   }
 
-  console.log(specialistAppointments, selectedService)
-
   return (
-    <div className="flex">
-      <div className="mt-20 md:mt-28 w-full flex flex-col gap-4 items-center justify-center p-4">
+    <div className="flex flex-col min-h-screen">
+      {loading && (
+        <div className="fixed top-0 left-0 w-full h-full bg-white bg-opacity-90 z-50 flex items-center justify-center">
+          <div>
+            <FadeLoader color="#29325B" />
+          </div>
+        </div>
+      )}
+
+      <div className="flex-grow mt-20 md:mt-28 w-full flex flex-col gap-4 items-center justify-center p-4">
         <div className="w-full max-w-4xl">
           <div className="flex items-center mb-4 md:mb-8">
             <h1 className="text-xl sm:text-2xl md:text-4xl font-semibold ">
@@ -389,6 +403,7 @@ export default function BookNowPage() {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   )
 }

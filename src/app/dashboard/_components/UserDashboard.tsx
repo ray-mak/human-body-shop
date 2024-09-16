@@ -8,6 +8,7 @@ import deleteAppointment from "@/app/actions/appointments/deleteAppointment"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { FadeLoader } from "react-spinners"
 
 type AppointmentData = {
   date: Date
@@ -137,7 +138,15 @@ export default function UserDashboard() {
   console.log(userData, appointmentToCancel)
 
   if (!userData) {
-    return <p className="text-gray-600">Could not get user information.</p>
+    return (
+      <div>
+        <div className="fixed top-0 left-0 w-full h-full bg-white bg-opacity-90 z-50 flex items-center justify-center">
+          <div>
+            <FadeLoader color="#29325B" />
+          </div>
+        </div>
+      </div>
+    )
   }
   return (
     <div>
@@ -145,16 +154,16 @@ export default function UserDashboard() {
         <div>
           <div className="fixed left-0 top-0 w-full h-full bg-black h-full z-10 opacity-80"></div>
           <div className="fixed left-0 top-0 w-full h-full z-20 flex items-center justify-center">
-            <div className="relative m-6 p-6 md:p-12 bg-white flex flex-col gap-8 items-center justify-center bg-white z-20 border rounded-lg">
+            <div className="relative m-6 p-6 md:p-12 bg-white flex flex-col gap-8 items-center justify-center bg-white dark:bg-gray-800 z-20 border rounded-lg">
               <h2 className="text-2xl font-semibold">Cancel Appointment</h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-200">
                 Are you sure you want to cancel your appointment on{" "}
                 {format(new Date(appointmentToCancel?.date), "EEEE, MMMM d")} at{" "}
                 {appointmentToCancel?.startTime}?
               </p>
               <div className="flex gap-4">
                 <button
-                  className="text-blue-600 border border-blue-600 px-4 py-2 rounded-lg"
+                  className="text-blue-600 border border-blue-600 dark:text-blue-300 px-4 py-2 rounded-lg"
                   onClick={() => closeCancelModal()}
                 >
                   Keep Appointment
@@ -215,7 +224,7 @@ export default function UserDashboard() {
                           {appointment.clientDuration} minutes
                         </p>
                         <button
-                          className="mt-4 bg-white text-red-500 border border-red-500 px-2 py-1 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base"
+                          className="mt-4 bg-white dark:bg-gray-800 text-red-500 border border-red-500 px-2 py-1 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base"
                           onClick={() => openCancelModal(appointment)}
                         >
                           Cancel Appointment

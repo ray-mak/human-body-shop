@@ -55,13 +55,15 @@ export default function SelectService({
           return (
             <div
               key={object.id}
-              className="flex flex-col p-4 border rounded-md bg-gray-100"
+              className="flex flex-col p-4 border rounded-md bg-gray-100 dark:bg-gray-800"
             >
               <div className="flex">
                 <p className="font-medium">{object.name}</p>
                 <p className="ml-auto">${object.price}</p>
               </div>
-              <p className="text-gray-500">{object.clientDuration} Minutes</p>
+              <p className="text-gray-500 dark:text-gray-200">
+                {object.clientDuration} Minutes
+              </p>
               <p className="mt-4">{object.description}</p>
               <div className="mt-4 ml-auto"></div>
               <button
