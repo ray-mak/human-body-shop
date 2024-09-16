@@ -1,10 +1,16 @@
 import { checkRole } from "@/utils/roles"
 import { redirect } from "next/navigation"
 import UserDashboard from "./_components/UserDashboard"
+import { auth } from "@clerk/nextjs/server"
 
 export default function UserDash() {
   if (checkRole("admin")) {
     redirect("/admin")
+  }
+
+  const { userId } = auth()
+  if (!userId) {
+    redirect("/sign-in")
   }
 
   return (

@@ -182,7 +182,7 @@ export default function UserDashboard() {
       <div>
         <div>
           <h2 className="text-2xl font-semibold mb-4">Appointments</h2>
-          {!userData.appointments && (
+          {userData.appointments.length == 0 && (
             <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-lg">
               <Image
                 src="/images/calendaricon.png"

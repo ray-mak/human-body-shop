@@ -8,6 +8,11 @@
   line-height: 1.125em;
   padding: 0.25rem;
 }
+
+.dark .react-calendar {
+  background: #1a202c;
+}
+
 .react-calendar--doubleView {
   width: 700px;
 }

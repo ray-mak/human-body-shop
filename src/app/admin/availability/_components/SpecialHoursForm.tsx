@@ -179,9 +179,9 @@ export default function SpecialHoursForm() {
     <div className="flex flex-col items-center p-4 gap-4">
       {timeModal && (
         <div>
-          <div className="fixed left-0 top-0 w-full h-full bg-white h-full z-10 opacity-80"></div>
+          <div className="fixed left-0 top-0 w-full h-full bg-white dark:bg-gray-900 h-full z-10 opacity-80 "></div>
           <div className="fixed left-0 top-0 w-full h-full flex items-center  z-20 justify-center">
-            <div className="p-8 bg-white flex flex-col gap-8 items-center justify-center bg-white border rounded-lg shadow-xl">
+            <div className="p-8 bg-white flex flex-col gap-8 items-center justify-center bg-white dark:bg-gray-800 border rounded-lg shadow-xl">
               <div className="w-full">
                 <p>What hours are you available?</p>
                 <p className="text-left mt-2 font-semibold">
@@ -191,7 +191,7 @@ export default function SpecialHoursForm() {
               <div className="w-full flex flex-col sm:flex-row items-center gap-2">
                 {availableHours.length === 0 ? (
                   <div className="w-full flex">
-                    <p className="text-gray-600 text-base text-left">
+                    <p className="text-gray-600 dark:text-gray-300 text-base text-left">
                       Unavailable
                     </p>
                   </div>
@@ -268,7 +268,7 @@ export default function SpecialHoursForm() {
               <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-6">
                 <button
                   type="button"
-                  className="py-2 px-8 rounded-3xl border border-gray-300 text-gray-700 hover:bg-gray-100 order-2 sm:order-1"
+                  className="py-2 px-8 rounded-3xl border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-100 order-2 sm:order-1"
                   onClick={closeModal}
                 >
                   Cancel

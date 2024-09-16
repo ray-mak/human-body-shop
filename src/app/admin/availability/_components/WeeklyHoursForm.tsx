@@ -299,7 +299,7 @@ export default function WeeklyHoursForm() {
     <div className="flex">
       {loading && (
         <div>
-          <div className="loading-screen absolute w-full bg-white h-full z-10 opacity-80"></div>
+          <div className="loading-screen absolute w-full bg-white dark:bg-gray-800 h-full z-10 opacity-80"></div>
           <div className="loading-screen absolute w-full h-full  flex items-center justify-center">
             <div className="p-12 bg-white flex flex-col gap-8 items-center justify-center bg-white z-20 border-2 border-blue-500 rounded-lg shadow-xl">
               <ClipLoader size={100} color={"rgb(59 130 246)"} />
@@ -432,10 +432,10 @@ export default function WeeklyHoursForm() {
               )
             })}
           </div>
-          <div className="w-screen sm:w-full fixed sm:relative bottom-0 left-0 p-2 bg-white py-4 sm:py-0 border-t">
+          <div className="w-screen sm:w-full fixed sm:relative bottom-0 left-0 bg-white dark:bg-gray-900 p-4 sm:p-0 border-t sm:border-t-0 ">
             <button
               type="submit"
-              className="w-full py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
+              className="w-full py-2 px-4 rounded-md bg-blue-500 dark:bg-indigo-800 text-white hover:bg-blue-600"
               onClick={handleSubmit}
             >
               Save Availibilities

@@ -35,14 +35,16 @@ export default function SpecialHoursComponent() {
             checked={addMultipleDays}
             onChange={handleCheckbox}
           />
-          <span className="ml-2 text-gray-700">Add multiple days</span>
+          <span className="ml-2 text-gray-700 dark:text-gray-200">
+            Add multiple days
+          </span>
         </label>
-        <div className="flex p-1 border rounded-lg bg-gray-200 sm:ml-20">
+        <div className="flex p-1 border rounded-lg bg-gray-200 dark:bg-gray-950 sm:ml-20">
           <button
             type="button"
             aria-label="add special hours"
-            className={`border p-2 rounded-lg font-medium text-sm ${
-              viewCalendar ? "bg-white shadow-lg" : ""
+            className={`p-2 rounded-lg font-medium text-sm ${
+              viewCalendar ? "bg-white shadow-lg dark:bg-gray-800" : ""
             }`}
             onClick={viewAdd}
           >
@@ -51,8 +53,8 @@ export default function SpecialHoursComponent() {
           <button
             type="button"
             aria-label="add special hours"
-            className={`border p-2 rounded-lg font-medium text-sm ${
-              viewCalendar ? "" : "bg-white shadow-lg"
+            className={`p-2 rounded-lg font-medium text-sm ${
+              viewCalendar ? "" : "bg-white shadow-lg dark:bg-gray-800"
             }`}
             onClick={viewList}
           >

@@ -163,7 +163,6 @@
 
 .dark .react-calendar__tile:disabled {
   background-color: #1a202c;
-  color: #a9d4ff;
 }
 
 .dark .react-calendar__tile {

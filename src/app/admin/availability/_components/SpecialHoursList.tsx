@@ -212,9 +212,9 @@ export default function SpecialHoursList() {
       <div className="border p-4 sm:p-6 rounded-lg">
         {editModal && dateToEdit && (
           <div>
-            <div className="fixed left-0 top-0 w-full h-full bg-white h-full z-10 opacity-80"></div>
+            <div className="fixed left-0 top-0 w-full h-full bg-white dark:bg-gray-900 h-full z-10 opacity-80"></div>
             <div className="fixed left-0 top-0 w-full h-full flex items-center  z-20  justify-center">
-              <div className="p-8 bg-white flex flex-col gap-8 items-center justify-center bg-whiteborder rounded-lg shadow-xl">
+              <div className="p-8 bg-white flex flex-col gap-8 items-center justify-center bg-white dark:bg-gray-800 border rounded-lg shadow-xl">
                 <p>
                   Update availability for{" "}
                   <span className="font-semibold">
@@ -224,7 +224,7 @@ export default function SpecialHoursList() {
                 <div className="w-full flex flex-col sm:flex-row items-center gap-2">
                   {dateToEdit.hours.length < 1 ? (
                     <div className="w-full flex">
-                      <p className="text-gray-600 text-base text-left">
+                      <p className="text-gray-600 dark:text-gray-300 text-base text-left">
                         Unavailable
                       </p>
                     </div>
@@ -300,7 +300,7 @@ export default function SpecialHoursList() {
                 <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-6">
                   <button
                     type="button"
-                    className="py-2 px-8 rounded-3xl border border-gray-300 text-gray-700 hover:bg-gray-100 order-2 sm:order-1"
+                    className="py-2 px-8 rounded-3xl border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-100 order-2 sm:order-1"
                     onClick={closeModal}
                   >
                     Cancel
@@ -320,7 +320,9 @@ export default function SpecialHoursList() {
         <h2 className="text-lg font-semibold mb-6">Special Hours List</h2>
         <div className="flex flex-col gap-8">
           {specialAvailabilities.length === 0 && (
-            <p className="text-gray-700 italic">No special hours set.</p>
+            <p className="text-gray-700 dark:text-gray-300 italic">
+              No special hours set.
+            </p>
           )}
           {specialAvailabilities.map((availability, index) => {
             return (
@@ -330,7 +332,7 @@ export default function SpecialHoursList() {
               >
                 <h2>{format(availability.date, "MMM d, yyyy")}</h2>
                 {availability.hours.length < 1 ? (
-                  <p className="text-gray-700 col-span-3 sm:col-span-1">
+                  <p className="text-gray-700 dark:text-gray-300 col-span-3 sm:col-span-1">
                     Unavailable
                   </p>
                 ) : (
@@ -339,7 +341,10 @@ export default function SpecialHoursList() {
                       const parsedStart = parse(hour.start, "HH:mm", new Date())
                       const parsedEnd = parse(hour.end, "HH:mm", new Date())
                       return (
-                        <li key={index} className="text-gray-700">
+                        <li
+                          key={index}
+                          className="text-gray-700 dark:text-gray-300"
+                        >
                           {format(parsedStart, "h:mm a")} -{" "}
                           {format(parsedEnd, "h:mm a")}
                         </li>
