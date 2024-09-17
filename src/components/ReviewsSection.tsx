@@ -12,33 +12,33 @@ import React, { useEffect, useState } from "react"
 const reviews = [
   {
     id: 1,
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatem, quos, quas dolorum, voluptatibus quidem",
-    author: "John Doe",
+    text: "Went to Kevin with a couple of different aches. His body work left me feeling great. His knowledge coupled with his attention to detail will definitely have me returning for another session.",
+    author: "Romeo G",
   },
   {
     id: 2,
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatem, quos, quas dolorum, voluptatibus quidem",
-    author: "Jane Smith",
+    text: "Kevin knows the body well and was able to loosen my back and legs that are chronically tight from lifting weights. The atmosphere is warm and inviting. Will definitely be back!",
+    author: "Eric H",
   },
   {
     id: 3,
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatem, quos, quas dolorum, voluptatibus quidem",
-    author: "Robert Johnson",
+    text: "I really enjoyed the experience. Each time I go, definitely I want to come back. Kevin, Not only has very good skills; he also takes the time to teach you how you can improve your condition and feel better.",
+    author: "Rosario P",
   },
   {
     id: 4,
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatem, quos, quas dolorum, voluptatibus quidem",
-    author: "Emily Davis",
+    text: "Kevin is great! Very knowledgeable and competent. He repeatedly asked about my comfort level and made me feel at ease. I will definitely be going back",
+    author: "Anthony C",
   },
   {
     id: 5,
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatem, quos, quas dolorum, voluptatibus quidem",
-    author: "Robert Smith",
+    text: "Highly recommend The Human Body Shop. Kevin spent the time helping me figure out my key issue to low back tension and weakness. Felt better after first visit. Thank you!",
+    author: "Cori T",
   },
   {
     id: 6,
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatem, quos, quas dolorum, voluptatibus quidem",
-    author: "Emily Smith",
+    text: "The special attention that was given to the muscles and tendons was really detailed. I was also given exercise to continue the healing process. I felt like I was on the road to recovery. ",
+    author: "Sonia P",
   },
 ]
 const ReviewsSection = () => {

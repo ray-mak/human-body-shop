@@ -9,8 +9,7 @@ const FeaturesSection3 = () => {
         <div className="w-20 h-[2px] bg-mutedTeal"></div>
       </div>
       <p className="text-center text-gray-600 text-sm dark:text-gray-200">
-        This is our process. Lorem ipsum dolor sit amet consectetur adipisicing
-        elit.{" "}
+        This is our process to helping you achieve a pain-free lifestyle.
       </p>
       <div className="mt-12 w-full md:w-5/6 lg:w-3/4 lg:max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-10 p-4 md:p-0">
         <div className="flex flex-col items-center justify-center gap-4">
@@ -22,12 +21,12 @@ const FeaturesSection3 = () => {
               alt="icon of massage"
             />
           </div>
-          <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-200">
-            Step One
+          <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-200 text-center">
+            Assessment
           </h3>
           <p className="text-center text-gray-600 text-sm dark:text-gray-200">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatem, quos, quas dolorum, voluptatibus quidem.
+            We begin by thoroughly assessing posture and areas of discomfort to
+            pinpoint the root cause of pain.
           </p>
         </div>
         <div className="flex flex-col items-center justify-center gap-4">
@@ -40,11 +39,11 @@ const FeaturesSection3 = () => {
             />
           </div>
           <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-200">
-            Step Two
+            Bodywork
           </h3>
           <p className="text-center text-gray-600 text-sm dark:text-gray-200">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatem, quos, quas dolorum, voluptatibus quidem.
+            We apply custom targeted techniques to relieve pain, improve
+            alignment, and release tension.
           </p>
         </div>
         <div className="flex flex-col items-center justify-center gap-4">
@@ -57,11 +56,11 @@ const FeaturesSection3 = () => {
             />
           </div>
           <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-200">
-            Step Three
+            Proactivity
           </h3>
           <p className="text-center text-gray-600 text-sm dark:text-gray-200">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatem, quos, quas dolorum, voluptatibus quidem.
+            To maintain the benefits of your bodywork, we guide you through
+            corrective exercises and stretching routines.
           </p>
         </div>
       </div>

@@ -13,12 +13,12 @@ const FeaturesSection = () => {
               alt="icon of massage"
             />
           </div>
-          <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-200">
-            Massage Service
-          </h3>
+          <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-200 text-center">
+            Alignment
+          </h2>
           <p className="text-center text-gray-600 text-sm dark:text-gray-200">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatem, quos, quas dolorum, voluptatibus quidem.
+            Restore your body{"'"}s natural alignment that target pain, improve
+            posture, and correct imbalances.
           </p>
         </div>
         <div className="flex flex-col items-center justify-center gap-4">
@@ -30,12 +30,12 @@ const FeaturesSection = () => {
               alt="icon of massage"
             />
           </div>
-          <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-200">
-            Massage Benefit Two
-          </h3>
+          <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-200 text-center">
+            Mobility
+          </h2>
           <p className="text-center text-gray-600 text-sm dark:text-gray-200">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatem, quos, quas dolorum, voluptatibus quidem.
+            Boost your flexibility and performance with expert-guided stretching
+            and mobilization protocols.
           </p>
         </div>
         <div className="flex flex-col items-center justify-center gap-4">
@@ -47,12 +47,12 @@ const FeaturesSection = () => {
               alt="icon of massage"
             />
           </div>
-          <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-200">
-            Massage Benefit
-          </h3>
+          <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-200 text-center">
+            Therapy
+          </h2>
           <p className="text-center text-gray-600 text-sm dark:text-gray-200">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatem, quos, quas dolorum, voluptatibus quidem.
+            Relieve muscle tension and enhance circulation with unique
+            therapeutic techniques like cupping.
           </p>
         </div>
       </div>

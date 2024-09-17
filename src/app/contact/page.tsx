@@ -26,8 +26,8 @@ const contactPage = () => {
             <div className="w-12 sm:w-20 h-[2px] bg-mutedTeal"></div>
           </div>
           <p className="text-gray-700 dark:text-gray-200 text-center">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
-            dolor sit amet consectetur adipisicing elit.
+            Reach out today to schedule your session or ask any questions—your
+            path to better health begins here!
           </p>
         </div>
         <div className="w-full md:w-5/6 lg:w-3/4 lg:max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-10 p-4 md:p-0">
@@ -41,8 +41,8 @@ const contactPage = () => {
               Address
             </h3>
             <div className="flex flex-col gap-1 text-center text-gray-600 dark:text-gray-200">
-              <p>1234 Main St.</p>
-              <p>City, State 12345</p>
+              <p>319 Pinnacle St. Ste A</p>
+              <p>Perris, CA 92570</p>
             </div>
           </div>
           <div className="flex flex-col items-center justify-center gap-6 hover:bg-gray-50 dark:hover:bg-gray-900 transition duration-300 hover:shadow-xl py-4 rounded-md">
@@ -55,7 +55,7 @@ const contactPage = () => {
               Phone
             </h3>
             <div className="flex flex-col gap-1 text-center text-gray-600 dark:text-gray-200">
-              <p>555-555-5555</p>
+              <p>951-990-3185</p>
               <br />
             </div>
           </div>
@@ -69,7 +69,7 @@ const contactPage = () => {
               Email
             </h3>
             <div className="flex flex-col gap-1 text-center text-gray-600 dark:text-gray-200">
-              <p>abc123@gmail.com</p>
+              <p>thehumanbodyshopllc@gmail.com</p>
               <br />
             </div>
           </div>

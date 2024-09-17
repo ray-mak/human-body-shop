@@ -7,7 +7,7 @@ const AdminNav = () => {
   const pathname = usePathname()
   return (
     <div className="flex">
-      <div className="fixed mt-20 w-full flex items-center justify-center gap-4 md:gap-8 bg-gray-200 dark:bg-gray-800 py-4 z-[2]">
+      <div className="fixed top-20 w-full flex items-center justify-center gap-4 md:gap-8 bg-gray-200 dark:bg-gray-800 py-4 z-[2]">
         <Link
           href="/admin"
           className={`font-semibold text-darkIndigo dark:text-lightGray transition-colors duration-300 ${

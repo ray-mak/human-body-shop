@@ -5,14 +5,19 @@ import {
 } from "@fortawesome/free-brands-svg-icons"
 import Link from "next/link"
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons"
+import Image from "next/image"
 
 const Footer = () => {
   return (
-    <div className="flex items-center justify-center bg-darkIndigo">
+    <div className="flex items-center justify-center bg-indigo-950">
       <div className="relative  md:w-5/6 lg:w-3/4 lg:max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 px-4 md:px-0 py-20 text-gray-200 gap-8">
         <div>
-          <h3 className="font-bold text-3xl">Company</h3>
-          <p className="mt-2">Company slogan/tagline</p>
+          <Image
+            src="/images/hbslogo.svg"
+            width={180}
+            height={60}
+            alt="human body shop logo"
+          />
         </div>
         <div className="text-sm">
           <h3 className="text-lg font-semibold">Contact Us</h3>
@@ -22,19 +27,15 @@ const Footer = () => {
                 <td className="align-top">Address:</td>
                 <td className="pl-4">
                   <div>
-                    123 Main St.
+                    319 Pinnacle St. Ste A
                     <br />
-                    Springfield, IL 62701
+                    Perris, CA 92570
                   </div>
                 </td>
               </tr>
               <tr>
-                <td>Email:</td>
-                <td className="pl-4">abc123@gmail.com</td>
-              </tr>
-              <tr>
                 <td>Phone:</td>
-                <td className="pl-4">123-456-7890</td>
+                <td className="pl-4">951-990-3185</td>
               </tr>
             </tbody>
           </table>
@@ -52,8 +53,18 @@ const Footer = () => {
             </Link>
           </div>
           <div className="mt-2 flex gap-4">
-            <FontAwesomeIcon icon={faSquareFacebook} size="xl" />
-            <FontAwesomeIcon icon={faInstagram} size="xl" />
+            <Link
+              href="https://www.facebook.com/TheHumanBodyShopLLC/"
+              target="_blank"
+            >
+              <FontAwesomeIcon icon={faSquareFacebook} size="xl" />
+            </Link>
+            <Link
+              href="https://www.instagram.com/thehumanbodyshop_/?hl=en"
+              target="_blank"
+            >
+              <FontAwesomeIcon icon={faInstagram} size="xl" />
+            </Link>
           </div>
         </div>
         <div className="absolute text-xs flex flex-col items-center top-[70%] md:top-1/3 right-0 md:right-0">

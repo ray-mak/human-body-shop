@@ -26,14 +26,17 @@ const FeaturesSection2 = () => {
           </p>
 
           <p className="text-gray-600 mt-4 text-sm 2xl:text-base dark:text-gray-300">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatem, quos, quas dolorum, voluptatibus quidem.
+            Trigger Point Therapy offers significant benefits by targeting tight
+            knots in your muscles that cause pain and limit movement. By
+            applying focused pressure to these trigger points, this technique
+            helps release tension, improve blood flow, and reduce discomfort.
           </p>
           <p className="text-gray-600 mt-2 text-sm 2xl:text-base dark:text-gray-300">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatem, quos, quas dolorum, voluptatibus quidem. Lorem ipsum
-            dolor sit amet consectetur adipisicing elit. Quisquam voluptatem,
-            quos, quas dolorum, voluptatibus quidem.
+            It{"'"}s an effective way to alleviate chronic pain, especially in
+            areas like the neck, shoulders, and back, while also restoring
+            mobility by loosening tight muscles. Additionally, it speeds up
+            recovery by enhancing circulation and breaking down muscle
+            adhesions, promoting faster healing.
           </p>
           <div className="flex flex-col md:flex-row gap-6 mt-8 items-center">
             <Link

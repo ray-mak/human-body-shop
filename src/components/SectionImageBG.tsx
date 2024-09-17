@@ -5,9 +5,13 @@ const SectionImageBG = () => {
   return (
     <div className="image-section flex flex-col items-center justify-center py-20 gap-4">
       <div className="flex flex-col w-full md:w-5/6 lg:w-3/4 lg:max-w-6xl gap-4 p-4 md:p-0">
-        <p className="text-white text-2xl font-semibold">Another heading</p>
-        <p className="text-white text-lg font-medium">
-          Another short description and call to action
+        <p className="text-white text-2xl font-semibold">
+          Realign Your Body, Reclaim Your Life
+        </p>
+        <p className="text-white text-lg ">
+          Experience relief from pain and improve your posture and mobility with
+          our personalized treatments. Book your session today and start feeling
+          your best!
         </p>
         <div className="mt-6">
           <Link
