@@ -8,7 +8,10 @@ import SectionImageBG from "@/components/SectionImageBG"
 import Image from "next/image"
 import Link from "next/link"
 
+import ReactDOM from "react-dom"
+
 export default function Home() {
+  ReactDOM.preload("/images/hero-bg.webp", { as: "image" })
   return (
     <div>
       <div className="flex flex-col">
@@ -42,6 +45,7 @@ export default function Home() {
                 height={500}
                 alt="picture of someone getting a massage"
                 className="rounded-2xl w-3/4 min-[480px]:w-1/2 md:w-full"
+                priority
               />
             </div>
           </div>
