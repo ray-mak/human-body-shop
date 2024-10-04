@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CodeCraft - Custom Booking Solution
 
-## Getting Started
+CodeCraft is a web development agency specializing in custom solutions for small businesses. This project is a booking system that enables business owners to manage their availability while allowing clients to schedule appointments.
 
-First, run the development server:
+I developed the REST API for availabilities and bookings as well as designed the UI and booking flow for the client facing side.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- React
+- TypeScript
+- Tailwind CSS
+- NextJS
+- PostgreSQL
+- Prisma
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Live Site
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+[Live site with the integrated booking system.](https://www.thehumanbodyshop.pro/)
 
-## Learn More
+## Purpose
 
-To learn more about Next.js, take a look at the following resources:
+This booking app provides service businesses with a fully customizable scheduling solution. Owners can set weekly schedules, special hours, and extended days off.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+There's also a very intuitive schedule UI that allows staff members to visualize their weekly schedule. In addition to that, there is also a services section which allows admins to quickly add, edit, or delete services offered by the business.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The client side booking flow is also very intuitive, allowing the user to seamlessly select their provider, service, and appointment date. The interface is fully responsive and includes a dark mode option for enhanced usability.
 
-## Deploy on Vercel
+## The Process
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The first step in developing this booking app was creating a front-end interface for admins to submit their availabilities. The form logic and styling was done with React and Tailwind CSS.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Simultaneously, I set up the database and defined models for admins, users, availabilities, appointments, and all other models necessary for the booking flow. I used PostgreSQL as the database and Prisma as the ORM.
+
+Since I was using NextJS, I was able to create server-side actions to handle CRUD operations on availabilities, services and appointments.
+
+After creating the models and back-end logic, I continued working on the front-end UI to create visualizations of the availabilities and services.
+
+I also included an optional integration with Twilio and SendGrid to allow for text message and email notifications for upcoming appointments.
+
+## Problems
+
+Dealing with dates and times are an absolute headache. So instead of reinventing the wheel, I used date-fns. That helped standardize the dates and times, but it was still quite difficult integrating it with the admin schedule and calendar client.
+
+Another hurdle that took quite a bit of time overcoming was showing availabilities based off of the admin's schedule and existing appointments.
+
+I had to spend a lot of time making sure appointments don’t overlap and that availabilities accommodate for the selected service time.
+
+## Lesson Learned
+
+This was the first application that I built for someone else and not myself. I had to be a lot more rigorous when testing different scenarios to make sure appointments and availabilities don't conflict.
+
+With multiple NextJS projects under my belt, I was able to build this application much quicker, with most of the time spent on the date and time logic.
