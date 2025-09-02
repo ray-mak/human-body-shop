@@ -17,7 +17,7 @@ export default function Home() {
       <div className="flex flex-col">
         <div
           id="main"
-          className="hero-section mt-20 flex items-center justify-center"
+          className="hero-section mt-20 flex items-center justify-center dark:text-black"
         >
           <div className="w-full md:w-5/6 lg:w-3/4 lg:max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-16 p-4 md:p-0 mt-6 md:mt-0">
             <div className="flex flex-col justify-center">

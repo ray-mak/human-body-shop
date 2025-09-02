@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   title: "The Human Body Shop",
   description:
     "Optimizing the human body through addressing pain, posture, and performance.",
+  icons: {
+    icon: [{ url: "/favicon.png", type: "image/png" }],
+  },
 }
 
 export default async function RootLayout({
