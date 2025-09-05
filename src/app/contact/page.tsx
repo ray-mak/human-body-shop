@@ -1,4 +1,4 @@
-import ContactForm from "@/components/ContactForm"
+@import ContactForm from "@/components/ContactForm"
 import Footer from "@/components/Footer"
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons"
 import {
@@ -69,7 +69,7 @@ const contactPage = () => {
               Email
             </h3>
             <div className="flex flex-col gap-1 text-center text-gray-600 dark:text-gray-200">
-              <p>thehumanbodyshopllc@gmail.com</p>
+              <p>kevin@thehumanbodyshop.org</p>
               <br />
             </div>
           </div>
