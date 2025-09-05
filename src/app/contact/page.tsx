@@ -1,4 +1,4 @@
-@import ContactForm from "@/components/ContactForm"
+import ContactForm from "@/components/ContactForm"
 import Footer from "@/components/Footer"
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons"
 import {
